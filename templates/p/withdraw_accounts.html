@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>我的账户</title>
+    <script src="{{ image_host }}/js/react.min.js"></script>
+    <script src="{{ image_host }}/js/react-dom.min.js"></script>
+    <script src="{{ image_host }}/js/browser.min.js"></script>
+    <script src="{{ image_host }}/js/jquery-3.1.1.min.js"></script>
+    <style media="screen">
+    @media screen and (max-width:640px){
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        html,body{
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: "\5FAE\8F6F\96C5\9ED1","微软雅黑" Tahoma, Verdana, sans-serif, ;
+            background: #2A2F32;
+            position: relative;
+        }
+        a{
+            text-decoration: none;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        li{
+            list-style: none;
+            font-size: 12px;
+        }
+        .zhifubao{
+            width: 94%;
+            margin: 10px auto;
+            padding: 14px 4px;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 4px;
+        }
+        .zhifubao p{
+            color: #989898;
+        }
+        .zhifubaoImg{
+            float: left;
+            width:  40px;
+            height: 40px;
+        }
+        .zhifubaoImg img{
+            width:  40px;
+            height: 40px;
+        }
+        .zhifubaoInfor{
+            float: left;
+            margin-left: 15px;
+        }
+        .zhifubaoInfor .zhifubaoInfor_p1{
+            font-size: 16px;
+        }
+        .zhifubaoInfor .zhifubaoInfor_p2{
+            font-size: 12px;
+
+            height: 20px;
+            line-height: 20px;
+        }
+        .zhifubaoInfor .zhifubaoInfor_p3{
+            font-size: 12px;
+
+            height: 30px;
+            line-height: 40px;
+        }
+        .bank{
+            width: 94%;
+            margin: 10px auto;
+            padding: 14px 4px;
+            overflow: hidden;
+            background: #94572C;
+            border-radius: 4px;
+            color: #fff;
+        }
+        .bank1{
+            width: 94%;
+            margin: 10px auto;
+            padding: 14px 4px;
+            overflow: hidden;
+            background: #F9B49D;
+            border-radius: 4px;
+            color: #fff;
+        }
+        .footer{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            font-size: 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background: #34393C;
+        }
+        .footer a{
+            display: inline-block;
+            width: 50%;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .footer a:first-child{
+            border-right: 1px solid #000;
+        }
+        .footer1{
+            width: 100%;
+            height: 60px;
+            background:transparent;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+    class Account extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {cardItems:[]};
+        }
+        componentDidMount(){
+            var cardItems = [];
+            
+            {% for row in rows %}
+            cardItems.push({"type":"{{ row.account_type_code }}","truename":"{{ row.account_truename }}"
+                ,"card_type":"{{ row.card_type }}"
+                ,"card_number":"{{ row.card_number or row.account_username }}","bankname":"{{ row.bankname }}"});
+            {% endfor %}
+            this.setState({cardItems:cardItems});
+        }
+        render() {
+            return (
+                <div className="account">
+                {this.state.cardItems.map(item => (
+                    <BankCard item={item} />))
+                }
+                <Footer1/>
+                <Footer/>
+                </div>
+            );
+        }
+    };
+    class BankCard extends React.Component {
+        render() {
+            var c = "zhifubao";
+            if(this.props.item.type=="bank"){
+                c = "bank";
+            }
+            var img = "{{ image_host }}/images/youli/" + this.props.item.card_type + ".png";
+            return (
+                <div className={c}>
+                <div className="zhifubaoImg"><img src={img} alt="" /></div>
+                <div className="zhifubaoInfor">
+                <p className="zhifubaoInfor_p1">{this.props.item.bankname}</p>
+                <p className="zhifubaoInfor_p2">{this.props.item.truename}</p>
+                <div className="zhifubaoInfor_p3">{this.props.item.card_number}</div>
+                </div>
+                </div>
+            );
+        }
+    };
+    class Footer1 extends React.Component {
+        render() {
+            return (
+                <div className="footer1"></div>
+            );
+        }
+    };
+    class Footer extends React.Component {
+        render() {
+            return (
+                <div className="footer">
+                <a href="add_bank_account">添加银行卡</a>
+                <a href="add_alipay_account">添加支付宝</a>
+                </div>
+            );
+        }
+    };
+    ReactDOM.render(
+        <Account/>,
+        document.getElementById("example")
+    );
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>添加账户</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<style>
+			body{
+				font-family: "微软雅黑";
+				font-size: 15px;
+				background-color: rgb(243,243,243);
+			}
+			p{
+				width: 94%;
+				margin: 0 auto;
+				margin-left: 21px;
+				margin-bottom: 20px;
+				color:gray;
+			}
+			ul{
+				background-color: white;
+				width: 94%;
+				margin: 0 auto;
+				-webkit-padding-start: 0;
+			}
+			ul li{
+				list-style-type: none;
+				border-bottom:1px solid rgb(243,243,243);
+				padding: 10px;
+			}
+			ul li span>img{
+				float: right;
+				width: 26px;
+			}
+			button{
+			  width: 96%;
+  			  margin-left: 2%;
+  			  margin-top: 200px;
+   			  border-radius: 6px;
+   			  background-color: rgb(18,150,219);
+  			  font-family: "微软雅黑";
+			  font-size: 16px;
+			  color: white;
+			  padding: 10px
+			}
+			.inputcss{
+				font-size: 16px;
+				font-family: "微软雅黑";
+				border: none;
+			}
+			input{
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			请绑定持卡人本人的银行卡
+		</p>
+		<ul>
+			<li>
+				持卡人：
+				<input type="text" id="name" class="inputcss" placeholder="张三"/>
+				<span><img src="{{ image_host }}/images/youli/surprise.png"/></span>
+			</li>
+			<li>
+				卡号：<input type="tel" id="card" class="inputcss" placeholder="请输入银行卡号"/>
+			</li>
+		</ul>
+		<button id="btn">
+			下一步
+		</button>
+		<script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+		<script>
+			$(function(){
+				var cardReg  = /^(\d{16}|\d{19})$/;
+				$("#card").change(function(){
+					var iptCard = $("#card").val();
+					if(iptCard && !cardReg.test(iptCard)){
+		                alert("请输入正确卡号！");
+		                $("#card").focus();
+	                }
+				});
+			})
+		</script>
+	</body>
+</html>

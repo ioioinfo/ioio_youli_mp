@@ -1,0 +1,805 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<title>我的订单</title>
+<style type="text/css">
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    outline: 0;
+}
+blockquote, body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, th, ul {
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+body {
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 540px;
+    background: #fff;
+    font-size: 14px;
+    font-family: -apple-system,Helvetica,sans-serif;
+    line-height: 1.5;
+    color: #666;
+    -webkit-text-size-adjust: 100%!important;
+}
+body {
+    background: #efefef!important;
+}
+a, a:visited {
+    text-decoration: none;
+    color: #333;
+}
+img {
+    border: 0 none;
+    vertical-align: top;
+}
+ol, ul {
+    list-style: none;
+}
+em, i {
+    font-style: normal;
+}
+input{
+    height: 25px;
+    line-height: 25px;
+    font-size: 14px;
+}
+.hide { display: none; }
+.wx_wrap {
+    min-height: 375px;
+}
+@media only screen and (max-height: 480px)
+.wx_wrap {
+    min-height: 360px;
+}
+.wx_wrap {
+    position: relative;
+}
+.my_order_wrap {
+    overflow: hidden;
+}
+.my_order_inner {
+    position: relative;
+    min-height: 300px;
+    -webkit-transition: -webkit-transform .25s ease;
+    transition: -webkit-transform .25s ease;
+}
+.my_order {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    min-height: 300px;
+}
+.order, .order_box {
+    margin-bottom: 10px;
+    padding: 0 10px 10px;
+    background: #fff;
+    position: relative;
+}
+.order_head {
+    position: relative;
+    min-height: 60px;
+}
+.order_head .oh_content {
+    display: block;
+    padding: 10px 0;
+    position: relative;
+}
+.order_head p, .order_head small {
+    color: #999;
+    font-size: 12px;
+}
+.order_head p {
+    line-height: 1.7em;
+}
+.order_head .oh_btn {
+    position: absolute;
+    top: 14px;
+    right: 0;
+    display: block;
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    color: #fff;
+    line-height: 30px;
+    z-index: 1;
+    border-radius: 2px;
+    background: #e4393c;
+}
+.order_head .oh_btn.bg_1 {
+    background: #f19325;
+}
+.order_head .oh_btn.bg_2 {
+    background: #3884ff;
+}
+.order_head .oh_btn.bg_3 {
+    background: #18c461;
+}
+.order_head .oh_btn.bg_4 {
+    background: #32b8ea;
+}
+.order_head .oh_btn.bg_5 {
+    background: #1bc6c3;
+}
+.order_head .oh_btn.bg_6 {
+    background: #f19325;
+}
+.order_head .oh_btn+.oh_btn {
+    right: 90px;
+}
+.co_blue, .layer .tips a {
+    color: #3985ff;
+}
+.co_red, .hot_sale_service .item .main .price, .order_head .text, .order_item .oi_content p .price, .order_similar .order_similar_item .price {
+    font-family: arial;
+}
+.co_red {
+    color: #e4393c;
+}
+.order_head .oh_content {
+    display: block;
+    padding: 10px 0;
+    position: relative;
+}
+.order_head .oh_content:after {
+    border-color: #ddd;
+}
+.order_head span i {
+    display: inline-block;
+    width: 24px;
+}
+.buy_qrcode h3:after, .hd_bar:after, .hot_sale_service .item:after, .my_nav:after, .order:after, .order_box:after, .order_head .oh_content:after, .order_search_res:after, .order_shopBar:after, .order_wuliuBar:after, .search_tip_panel .tip_list .item:after, .search_tip_panel .tip_list:before {
+    content: '';
+    height: 0;
+    display: block;
+    border-bottom: 1px solid #ddd;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2)
+.buy_qrcode h3:after, .hd_bar:after, .hot_sale_service .item:after, .my_nav:after, .order:after, .order_box:after, .order_head .oh_content:after, .order_search_res:after, .order_shopBar:after, .order_wuliuBar:after, .search_tip_panel .tip_list .item:after, .search_tip_panel .tip_list:before {
+    -webkit-transform: scaleY(.5);
+    -webkit-transform-origin: 50% 100%;
+}
+.order_item {
+    position: relative;
+    margin-top: 10px;
+}
+.order_item .image {
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+.icon_service, .order_item .image {
+    position: relative;
+    float: left;
+    margin-right: 10px;
+}
+.my_nav {
+    height: 46px;
+    position: relative;
+    margin-bottom: -1px;
+}
+.my_nav, .my_nav.fixed ul {
+    width: 100%;
+    background: #efefef;
+}
+.hd_bar, .my_nav ul {
+    display: -webkit-box;
+    display: box;
+    display: -webkit-flex;
+    display: flex;
+}
+.my_nav ul {
+    overflow: hidden;
+}
+.hd_bar .hd_search_frm, .my_nav li {
+    display: block;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+.my_nav a {
+    position: relative;
+    display: block;
+    height: 43px;
+    line-height: 45px;
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+}
+.my_nav li.cur a {
+    border-bottom: 3px solid #e4393c;
+    color: #e4393c;
+}
+.my_nav .num {
+    margin-left: 2px;
+    color: #e4393c;
+}
+.my_nav li:not(:first-child) a:before {
+    content: '';
+    width: 0;
+    display: block;
+    border-left: 1px solid #ddd;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2)
+.hot_sale_service .item .main:after, .my_nav li:not(:first-child) a:before {
+    -webkit-transform: scaleX(.5);
+    -webkit-transform-origin: 0 0;
+}
+.my_nav li:not(:first-child) a:before {
+    border-color: #ccc;
+    top: 13px;
+    bottom: 13px;
+}
+.deal-item{
+    display: block;
+    position: relative;
+    padding-left: 10px;
+}
+.clearfix{
+        display: block;
+    }
+.deal-item-wrapper{
+    padding: 10px 10px 11px 0;
+    background: url(https://gss0.bdstatic.com/5eR1ciub_Q63otebn9fN2DJv/zt/huodong_common/dash.png) repeat-x left bottom;
+    background-size: auto 1px;
+}
+.deal-item-img{
+    position: relative;
+    float: left;
+    width: 85px;
+    height: 80px;
+    margin-right: 5px;
+    margin-left: -10px;
+    background: url(https://gss0.bdstatic.com/5eR1ciub_Q63otebn9fN2DJv/zt/zujian/lazy_load.png) no-repeat center center;
+    background-size: auto 65px;
+    overflow: hidden;
+}
+.deal-item-info{
+    position: relative;
+    overflow: hidden;
+}
+.deal-item-img img{
+    display: block;
+    width: 90px;
+    height: 80px;
+    margin-left: -8.5px;
+}
+.deal-item-info-name{
+    padding-right: 36px;
+    line-height: 16px;
+}
+.deal-item-info-name .title{
+    vertical-align: top;
+    display: inline-block;
+    font-size: 15px;
+    color: #333;
+    max-width: 200px;
+    font-weight: 700;
+    margin-right: 10px;
+    line-height: 16px;
+}
+.deal-item-info-distance{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #f34;
+    font-size: 15px;
+    line-height: 16px;
+}
+.deal-item-info-description{
+    color: #333;
+    font-size: 12px;
+    line-height: 12px;
+    padding-top: 7px;
+}
+.deal-item-info-descriptions{
+    color: #999;
+    font-size: 12px;
+    line-height: 12px;
+    padding-top: 7px;
+}
+.deal-item-info-distances{
+    position: absolute;
+    right: 0;
+    top: 45px;
+    color: #999;
+    font-size: 12px;
+    line-height: 12px;
+}
+.deal-item-info-price{
+    padding-top: 7px;
+    height: 16px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #999;
+}
+.deal-item-info-price .view-count{
+    float: right;
+    line-height: 16px;
+}
+.deal-item-info-price .view-count .yishou{
+    font-size: 12px;
+    color: #99;
+}
+.deal-item-info-price .promotion{
+    display: inline-block;
+    margin-left: 5px;
+    box-sizing: border-box;
+    border: 1px solid #999;
+    border-radius: 2px;
+    line-height: 14px;
+    vertical-align: top;
+    color: #999;
+    overflow: hidden;
+}
+.deal-item-info-price .promotion2{
+    display: inline-block;
+    margin-left: 1px;
+    box-sizing: border-box;
+    border: 1px solid #999;
+    border-radius: 2px;
+    line-height: 14px;
+    vertical-align: top;
+    color: #999;
+    overflow: hidden;
+}
+.deal-item-info-price .old-price{
+    margin-left: 4px;
+    color: #333;
+}
+
+/* wechat ui start */
+.weui_mask {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+.weui_dialog {
+    position: fixed;
+    z-index: 13;
+    width: 85%;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #FAFAFC;
+    text-align: center;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.weui_dialog_hd {
+    padding: 1.2em 0 .5em;
+}
+.weui_dialog_confirm .weui_dialog .weui_dialog_hd {
+    padding: 1.2em 20px .5em;
+}
+.weui_dialog_title {
+    font-weight: 400;
+    font-size: 17px;
+}
+.weui_dialog_bd {
+    padding: 0 20px;
+    font-size: 15px;
+    color: #888;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.weui_dialog_confirm .weui_dialog .weui_dialog_bd {
+    text-align: left;
+}
+.weui_dialog_ft {
+    position: relative;
+    line-height: 42px;
+    margin-top: 20px;
+    font-size: 17px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.weui_dialog_ft a {
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    color: #3CC51F;
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.weui_dialog_ft:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 1px;
+    border-top: 1px solid #D5D5D6;
+    color: #D5D5D6;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+.weui_btn_dialog.default {
+    color: #353535;
+}
+.weui_btn_dialog.primary {
+    color: #0BB20C;
+}
+.weui_dialog_confirm .weui_dialog_ft a {
+    position: relative;
+}
+.weui_dialog_confirm .weui_dialog_ft a:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    border-left: 1px solid #D5D5D6;
+    color: #D5D5D6;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+}
+.title span{
+    font-size:12px;
+    font-weight:500;
+}
+</style>
+</head>
+<body>
+    <div id="content">
+        <div class="wx_wrap">
+            <div class="my_nav">
+                <ul id="nav">
+                    <li class="{% if not cur or cur == "1" %}cur{% endif %}" no="1"><a href="javascript:;">进行中<span class="num" id="processNum"></span></a></li>
+                    <li no="2" class="{% if cur == "2" %}cur{% endif %}"><a href="javascript:;">已返利<span class="num" id="rebateNum"></span></a></li>
+                </ul>
+            </div>
+            <div class="my_order_wrap">
+                <div class="my_order_inner" id="cont">
+                    <div class="my_order">
+                        <div id="cont1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui_dialog_confirm" id="dialog_confirm_apply" style="display:none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">申请返利</strong></div>
+            <div class="weui_dialog_bd">确定要申请返利吗？</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog default cancel">取消</a>
+                <a href="javascript:;" class="weui_btn_dialog primary ok">确定</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui_dialog_confirm" id="dialog_confirm_price" style="display:none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">确认消费金额</strong></div>
+            <div class="weui_dialog_bd">本项目的消费金额是：<em class="co_red" id="contract_amount_text"></em>。是否确认？</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog default cancel">取消</a>
+                <a href="javascript:;" class="weui_btn_dialog primary ok">确定</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui_dialog_confirm" id="dialog_confirm_complain" style="display:none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">申诉</strong></div>
+            <div class="weui_dialog_bd"><input type="text" style="width:90%" class="shensu_reason" placeholder="输入申诉原因" /></div>
+            <div class="weui_dialog_bd">上传消费发票图片：<a href="javascript:;" class="weui_btn_dialog default upload">选择照片</a></div>
+            <div class="weui_dialog_bd"><img src="" class="upload_img" style="width:50px;height:50px;display:none;" /></div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog default cancel">取消</a>
+                <a href="javascript:;" class="weui_btn_dialog primary ok">确定</a>
+            </div>
+        </div>
+    </div>
+<script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.16.3/lodash.min.js"></script>
+<script type="lodash/template" id="process_list">
+<% _.forEach(projects, function(row) { %>
+    <div class="order_box">
+        <div class="order_head">
+            <a ordertype="0" href="" class="oh_content">
+                <p class="pState">
+                    <span>状<i></i>态：</span><em class="co_blue"><% if (row.state) { %><%- states[row.state] %><% } %></em>
+                </p>
+                <% if (row.state == "yiqueren" || row.state == "wancheng") { %>
+                <p>
+                    <span>消<i></i>费：</span><em class="co_red"><%- row.contract_amount_text %>元</em>
+                </p>
+                <% } %>
+                <% if (row.state == "wancheng") { %>
+                <p>
+                    <span>返<i></i>利：</span><em class=""><%- row.shiji_fanli_amount %>元</em>
+                </p>
+                <% } else { %>
+                <p>
+                    <span>返<i></i>利：</span><em class=""><%- row.project.fanli_text %></em>
+                </p>
+                <% } %>
+            </a>
+            <% if (!row.state || row.state == "yiyuyue") { %>
+                <a href="javascript:void(0);" data-id="<%- row.id %>" class="apply_btn oh_btn bg_2">申请返利</a>
+            <% } else if (row.state == "yiqueren") { %>
+                <a href="javascript:void(0);" data-id="<%- row.id %>" class="complain_btn oh_btn bg_6">申诉</a>
+                <a href="javascript:void(0);" data-id="<%- row.id %>" data-amount="<%- row.contract_amount_text %>" class="confirm_btn oh_btn bg_2">确认</a>
+            <% } %>
+        </div>
+        <a class="deal-item" href="project/<%- row.project_id %>">
+            <div class="deal-item-wrapper clearfix">
+                <div class="deal-item-img">
+                    <img class="scrollLoading" src="{{ api_host }}<%- row.project.main_image_url %>"></img>
+                </div>
+                <div class="deal-item-info">
+                    <div class="deal-item-info-name text-overflow">
+                        <span class="title text-overflow">新东方&nbsp;&nbsp;<span>(<%- row.project.name %>)</span></span>
+                    </div>
+                    <div class="deal-item-info-distance deal-distance-wrapper"><%- row.project.price_text %></div>
+                    <div class="deal-item-info-description text-overflow" style="width:280px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                        [<%- row.project.address %>]
+                    </div>
+                    <div class="deal-item-info-descriptions text-overflow"><%- row.project.xiangmuyoushi %></div>
+                    <div class="deal-item-info-distances deal-distance-wrapper"><%-row.project.recommends_count %>人推荐</div>
+                    <div class="deal-item-info-price">
+                        <span class="view-count">
+                            <span class="yishou"><%- row.project.subscribes_count %>人预定</span>
+                        </span>
+                        <span class="promotion2">
+                            <span class="scale">预约时间</span>
+                        </span>
+                        <span class="old-price"><%- row.subscribe_time_text %></span>
+                        <span class="promotion">
+                            <span class="scale">预约返利</span>
+                        </span>
+                        <span class="old-price"><%- row.project.fanli_text %></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+<% }); %>
+</script>
+<script type="text/javascript">
+$(function() {
+    var data = {debug:false,appId:'{{ info.appid }}',timestamp:{{ info.timestamp }},nonceStr:'{{ info.noncestr }}',signature:'{{ info.signature }}'};
+    var p_url = '{{ info.url }}';
+    data.jsApiList = [
+        'checkJsApi',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'openCard',
+        'chooseWXPay',
+        'chooseImage',
+        'uploadImage'
+    ];
+    wx.config(data);
+    wx.ready(function(){
+        wx.hideOptionMenu();
+    });
+    wx.error(function(res){
+    });
+
+    var states = {"yiyuyue":"已预约","daiqueren":"待确认","yiqueren":"已确认","shensuzhong":"申诉中","wancheng":"完成"};
+    var process_list;
+    var rebate_list;
+    var localIds;
+
+    var get_my_unfinished_subscribes = function() {
+        $.ajax({
+            url:"/get_my_unfinished_subscribes",
+            type:"GET",
+            data:{},
+            dataType:'json',
+            success:function(json){
+                if(!json.success) {
+                    alert(json.message);
+                    return;
+                }
+                process_list = json.projects;
+
+                reload_list_html(process_list);
+            }
+        });
+    };
+
+    var get_my_finished_subscribes = function() {
+        $.ajax({
+            url:"/get_my_finished_subscribes",
+            type:"GET",
+            data:{},
+            dataType:'json',
+            success:function(json){
+                if(!json.success) {
+                    alert(json.message);
+                    return;
+                }
+                rebate_list = json.projects;
+
+                reload_list_html(rebate_list);
+            }
+        });
+    };
+
+    var order_shenqingfanxian = function(project_subscribe_id) {
+        $.ajax({
+            url:"/order_shenqingfanxian",
+            type:"POST",
+            data:{project_subscribe_id:project_subscribe_id},
+            dataType:'json',
+            success:function(json){
+                get_my_unfinished_subscribes();
+            }
+        });
+    };
+
+    var order_yonghu_confirm = function(project_subscribe_id) {
+        $.ajax({
+            url:"/order_yonghu_confirm",
+            type:"POST",
+            data:{project_subscribe_id:project_subscribe_id},
+            dataType:'json',
+            success:function(json){
+                get_my_unfinished_subscribes();
+            }
+        });
+    };
+
+    var order_yonghu_shensu = function(project_subscribe_id,server_id,$dialog) {
+        var shensu_reason = $(".shensu_reason").val();
+        if (shensu_reason == "") {
+            alert("请输入申诉原因");
+            return;
+        }
+        $.ajax({
+            url:"/order_yonghu_shensu",
+            type:"POST",
+            data:{project_subscribe_id:project_subscribe_id,server_id:server_id,shensu_reason:shensu_reason},
+            dataType:'json',
+            success:function(json){
+                if (json.success) {
+                    get_my_unfinished_subscribes();
+                    $dialog.fadeOut(200);
+                } else {
+                    alert(json.message);
+                }
+            }
+        });
+    };
+
+    var reload_list_html = function (projects) {
+        $("#cont").css("height",(projects.length *168+100) + "px");
+        $("#cont1").html(_.template($("#process_list").html())({"projects":projects,"states":states}));
+
+        //申请返利
+        $(".apply_btn").click(function() {
+            var project_subscribe_id = $(this).data("id");
+            var $dialog = $('#dialog_confirm_apply');
+            $dialog.fadeIn(200);
+            $dialog.find('.cancel').one('click', function () {
+                $dialog.fadeOut(200);
+            });
+            $dialog.find('.ok').one('click', function () {
+                order_shenqingfanxian(project_subscribe_id);
+                $dialog.fadeOut(200);
+            });
+        });
+        //确认返利金额
+        $(".confirm_btn").click(function() {
+            var project_subscribe_id = $(this).data("id");
+            var contract_amount_text = $(this).data("amount");
+            var $dialog = $('#dialog_confirm_price');
+            $dialog.fadeIn(200);
+            $dialog.find('#contract_amount_text').html(contract_amount_text);
+            $dialog.find('.cancel').one('click', function () {
+                $dialog.fadeOut(200);
+            });
+            $dialog.find('.ok').one('click', function () {
+                order_yonghu_confirm(project_subscribe_id);
+                $dialog.fadeOut(200);
+            });
+        });
+        //申诉
+        $(".complain_btn").click(function() {
+            var project_subscribe_id = $(this).data("id");
+            var $dialog = $('#dialog_confirm_complain');
+            $dialog.fadeIn(200);
+            //上传图片
+            $dialog.find('.upload').one('click', function () {
+                //选择图片
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        $dialog.find('.upload_img').attr('src',localIds[0]).show();
+                    }
+                });
+            });
+            $dialog.find('.cancel').one('click', function () {
+                $dialog.fadeOut(200);
+            });
+            $dialog.find('.ok').one('click', function () {
+                if (!localIds || localIds[0].length == 0) {
+                    alert('请上传消费发票');
+                    return;
+                }
+                wx.uploadImage({
+                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var server_id = res.serverId; // 返回图片的服务器端ID
+                        order_yonghu_shensu(project_subscribe_id,server_id,$dialog);
+                    }
+                });
+            });
+        });
+    };
+
+    $("#nav li[no='1'] a").click(function() {
+        $("#nav li").removeClass("cur");
+        $("#nav li[no='1']").addClass("cur");
+
+        if (process_list) {
+            reload_list_html(process_list);
+        } else {
+            get_my_unfinished_subscribes();
+        }
+    });
+    $("#nav li[no='2'] a").click(function() {
+        $("#nav li").removeClass("cur");
+        $("#nav li[no='2']").addClass("cur");
+
+        if (rebate_list) {
+            reload_list_html(rebate_list);
+        } else {
+            get_my_finished_subscribes();
+        }
+    });
+
+    if (!process_list) {
+        get_my_unfinished_subscribes();
+    }
+});
+</script>
+</body>
+</html>

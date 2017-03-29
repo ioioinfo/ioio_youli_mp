@@ -1,0 +1,908 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>项目详情</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" >
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="keywords" content="" />
+    <style type="text/css">
+    .struct-data dd:before {
+        content: '';
+        float: left;
+        margin: 8px 0 0 -16px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #666;
+    }
+    .privilege-list:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        margin-top: -5px;
+        width: 7px;
+        height: 7px;
+        border-top: 1px solid #111;
+        border-right: 1px solid #111;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    .detail-desc .policy:after, .detail-desc .policy:before {
+        display: table;
+        content: '';
+        line-height: 0;
+    }
+    .detail-desc .policy:after {
+        clear: both;
+    }
+    .detail-desc .policy:after, .detail-desc .policy:before {
+        display: table;
+        content: '';
+        line-height: 0;
+    }
+    a, abbr, address, b, blockquote, cit, code, dd, del, dfn, dl, dt, em, fieldset, h1, h2, h3, h4, h5, h6, hr, i, ins, label, legend, li, ol, p, pre, q, samp, small, strong, sub, sup, ul {
+        border: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        margin: 0;
+        padding: 0;
+    }
+    article, aside, audio, body, canvas, caption, details, div, figure, footer, header, hgroup, html, iframe, img, mark, menu, nav, object, section, span, summary, table, tbody, td, tfoot, thead, tr, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    article, aside, audio, canvas, figcaption, figure, figure img, footer, header, hgroup, nav, section, video {
+        display: block;
+    }
+    body, html {
+        font-family: Helvetica-Neue,Helvetica,Arial,sans-serif;
+        line-height: 1.5;
+    }
+    body {
+        background-color: #f1f1f1;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: rgba(255,255,255,0);
+    }
+    body, button, input, pre, select, textarea {
+        font-size: 14px;
+        font-family: "Droid Sans","Droid Sans Fallback","Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    }
+    body {
+        padding-bottom: 60px;
+    }
+    h1, h2, h3, h4, h5, p, span {
+        overflow: visible;
+    }
+    .detail-image-wrap .detail-image .album .collect-icon:after {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 4px;
+        width: 32px;
+        height: 32px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        background-color: rgba(255,255,255,.6);
+        z-index: -1;
+    }
+    .detail-image-wrap {
+        background-color: #fff;
+    }
+    .detail-image-wrap .detail-image {
+        position: relative;
+        z-index: 1;
+    }
+    a, a:active, a:visited {
+        color: inherit;
+        text-decoration: none;
+    }
+    .detail-image-wrap .detail-image .image-wrap {
+        display: block;
+        height: 194px;
+        overflow: hidden;
+    }
+    a img {
+        border: 0;
+    }
+    .detail-image-wrap .detail-image .image-wrap img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .detail-image-wrap .title-wrap {
+        padding: 12px 12px 12px 0;
+        margin-left: 12px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .detail-image-wrap .title-wrap .title {
+        font-size: 18px;
+        line-height: 22px;
+        font-weight: 700;
+        color: #22222d;
+    }
+    .detail-image-wrap .title-wrap .desc {
+        margin-top: 11px;
+        line-height: 16px;
+        font-size: 13px;
+        color: #88888d;
+    }
+    .detail-desc {
+        padding: 0 0 0 12px;
+        background-color: #fff;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 13px;
+        color: #55555d;
+    }
+    .detail-desc .policy {
+        padding: 8px 0 15px;
+    }
+    .privilege-list {
+        padding: 4px 20px 14px 0;
+        border-bottom: 1px solid #e0e0e0;
+        overflow: hidden;
+        position: relative;
+    }
+    .privilege-list .privilege-item {
+        max-height: 52px;
+        overflow: hidden;
+    }
+    .privilege-list .fake-icon {
+        float: left;
+        margin: 10px 10px 0 0;
+        line-height: 14px;
+        height: 14px;
+        width: 90%;
+        padding-left: 3px;
+        /*border: 1px solid #ff4683;
+        border-radius: 2px;
+        color: #ff4683;*/
+        background-size: 14.8px;
+        background-position: -0px -121px;
+        background-image: url({{ img_host }}/images/youli/order_detail_021.jpg);
+        background-repeat: no-repeat;
+    }
+    .privilege-list .fake-icon .text {
+        display: block;
+        font-style: normal;
+        font-size: 14px;
+        -webkit-transform: scale(.91666667);
+        -moz-transform: scale(.91666667);
+        -ms-transform: scale(.91666667);
+        -o-transform: scale(.91666667);
+        transform: scale(.91666667);
+        -webkit-transform-origin: 50% 50%;
+        -moz-transform-origin: 50% 50%;
+        -ms-transform-origin: 50% 50%;
+        -o-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+    }
+    .detail-desc .policy .rule-item {
+        float: left;
+        margin: 7px 10px 0 0;
+        padding-left: 20px;
+        background: url({{ img_host }}/images/youli/detail_01.png) 0 center no-repeat;
+        -webkit-background-size: 15px 15px;
+        background-size: 15px 15px;
+    }
+    .detail-desc .policy .amount {
+        background-image: url({{ img_host }}/images/youli/detail_02.png);
+    }
+    .detail-desc .policy .expired {
+        background-image: url({{ img_host }}/images/youli/detail_03.png);
+    }
+    .detail-desc .policy .recommend {
+        background-size: 16.7px;
+        background-position: -0.3px -49px;
+        background-image: url({{ img_host }}/images/youli/order_detail_021.jpg);
+        background-repeat: no-repeat;
+    }
+    .detail-desc .policy .mianyuyue {
+        background-size: 15.8px;
+        background-position: -0.3px -68px;
+        background-image: url({{ img_host }}/images/youli/order_detail_021.jpg);
+        background-repeat: no-repeat;
+    }
+    .good-detail-page .hd {
+        background-color: #efefef;
+        padding: 10px 0 6px 12px;
+        height: 13px;
+        line-height: 1;
+        font-weight: 400;
+        font-size: 13px;
+        color: #888;
+    }
+    .good-detail-page .hd2 {
+        background-color: #efefef;
+        padding: 0;
+        height: 10px;
+        line-height: 1;
+        font-weight: 400;
+        font-size: 13px;
+        color: #888;
+    }
+    .struct-data {
+        background-color: #fff;
+        padding: 10px 12px;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    @media only screen and (-webkit-min-device-pixel-ratio:2),only screen and (min-device-pixel-ratio:2) {
+        .struct-data {
+            border: none;
+            background-image: -webkit-linear-gradient(270deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-webkit-linear-gradient(180deg,transparent,transparent 50%,transparent 50%),-webkit-linear-gradient(90deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-webkit-linear-gradient(0,transparent,transparent 50%,transparent 50%);
+            background-image: -moz-linear-gradient(270deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-moz-linear-gradient(180deg,transparent,transparent 50%,transparent 50%),-moz-linear-gradient(90deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-moz-linear-gradient(0,transparent,transparent 50%,transparent 50%);
+            background-image: -o-linear-gradient(270deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-o-linear-gradient(180deg,transparent,transparent 50%,transparent 50%),-o-linear-gradient(90deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-o-linear-gradient(0,transparent,transparent 50%,transparent 50%);
+            background-image: linear-gradient(180deg,#e0e0e0,#e0e0e0 50%,transparent 50%),linear-gradient(270deg,transparent,transparent 50%,transparent 50%),linear-gradient(0deg,#e0e0e0,#e0e0e0 50%,transparent 50%),linear-gradient(90deg,transparent,transparent 50%,transparent 50%);
+            background-size: 100% 1px,1px 100%,100% 1px,1px 100%;
+            background-repeat: no-repeat;
+            background-position: top,right top,bottom,left top;
+        }
+    }
+    .struct-data dt {
+        margin: 20px 0 5px;
+        line-height: 24px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #22222d;
+    }
+    .struct-data dt:first-child {
+        margin-top: 0;
+    }
+    .struct-data dd {
+        padding-left: 16px;
+        margin-bottom: 5px;
+        font-size: 14px;
+        line-height: 19px;
+        color: #666;
+    }
+    .ugc-segment {
+        padding: 1px 0;
+        background-color: #fff;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    @media only screen and (-webkit-min-device-pixel-ratio:2),only screen and (min-device-pixel-ratio:2){
+        .ugc-segment{
+            border: none;
+            background-image: -webkit-linear-gradient(270deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-webkit-linear-gradient(180deg,transparent,transparent 50%,transparent 50%),-webkit-linear-gradient(90deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-webkit-linear-gradient(0,transparent,transparent 50%,transparent 50%);
+            background-image: -moz-linear-gradient(270deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-moz-linear-gradient(180deg,transparent,transparent 50%,transparent 50%),-moz-linear-gradient(90deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-moz-linear-gradient(0,transparent,transparent 50%,transparent 50%);
+            background-image: -o-linear-gradient(270deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-o-linear-gradient(180deg,transparent,transparent 50%,transparent 50%),-o-linear-gradient(90deg,#e0e0e0,#e0e0e0 50%,transparent 50%),-o-linear-gradient(0,transparent,transparent 50%,transparent 50%);
+            background-image: linear-gradient(180deg,#e0e0e0,#e0e0e0 50%,transparent 50%),linear-gradient(270deg,transparent,transparent 50%,transparent 50%),linear-gradient(0deg,#e0e0e0,#e0e0e0 50%,transparent 50%),linear-gradient(90deg,transparent,transparent 50%,transparent 50%);
+            background-size: 100% 1px,1px 100%,100% 1px,1px 100%;
+            background-repeat: no-repeat;
+            background-position: top,right top,bottom,left top;
+        }
+    }
+    .ugc-segment .ugc-list {
+        border-top: 1px solid #e0e0e0;
+    }
+    .ugc-content {
+        width: 100%;
+        border-bottom: 1px solid #e5e5e5;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .ugc-segment .ugc-list .ugc-content {
+        padding: 10px 12px;
+    }
+    .ugc-segment .ugc-more .link {
+        display: block;
+        line-height: 44px;
+        background-color: #fff;
+        padding: 0 12px;
+        font-size: 14px;
+        color: #ff4683;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .ugc-content .user {
+        position: relative;
+        font-size: 13px;
+        color: #9b9b9b;
+        line-height: 21px;
+        height: 21px;
+    }
+    .ugc-content .user .name {
+        float: left;
+        max-width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 21px;
+        color: #111;
+    }
+    .ugc-content .user .date {
+        margin-left: 5px;
+        font-size: 12px;
+        color: #88888d;
+    }
+    .ugc-content .user .score-star {
+        position: absolute;
+        top: 0;
+        right: 2px;
+    }
+    .ugc-content .user .score-star .star-gray {
+        display: inline-block;
+        background: url({{ img_host }}/images/youli/detail_05.png) no-repeat;
+        background-size: auto 100%;
+    }
+    .ugc-content .user .score-star .star-gray12 {
+        width: 80.52px;
+        height: 12px;
+    }
+    .ugc-content .user .score-star .star-gray .star-real {
+        width: 0;
+        height: 100%;
+        background: url({{ img_host }}/images/youli/detail_06.png) no-repeat;
+        background-size: auto 100%;
+    }
+    .ugc-content .comment {
+        position: relative;
+        margin-top: 10px;
+        line-height: 150%;
+        font-size: 13px;
+        color: #88888d;
+    }
+    .ugc-content .comment .comment-content {
+        max-height: 78px;
+        overflow: hidden;
+    }
+    .ugc-content .comment .comment-more {
+        display: none;
+        position: absolute;
+        right: -10px;
+        bottom: -14px;
+        width: 40px;
+        height: 40px;
+    }
+    .ugc-content .album-wrap {
+        margin-top: 14px;
+        padding-left: 24px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .ugc-content .album-wrap .album-list {
+        margin-left: -24px;
+        margin-right: -8px;
+        overflow: hidden;
+    }
+    .ugc-content .album-wrap .album:nth-child(1), .ugc-content .album-wrap .album:nth-child(2), .ugc-content .album-wrap .album:nth-child(3), .ugc-content .album-wrap .album:nth-child(4) {
+        margin-top: 0;
+    }
+    .ugc-content .album-wrap .album {
+        float: left;
+        width: 25%;
+        height: 68px;
+        box-sizing: border-box;
+        padding-right: 8px;
+        margin-top: 8px;
+    }
+    .ugc-content .album-wrap .album .img-wrap {
+        width: 100%;
+        height: 100%;
+        background: url({{ img_host }}/images/youli/detail_07.png) no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+    }
+    .ugc-content .album-wrap img {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    .good-detail-page .buy-btn-wrap {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #fff;
+        border-top: 1px solid #e0e0e0;
+        z-index: 10;
+    }
+    .buy-segment {
+        position: relative;
+        height: 46px;
+        line-height: 46px;
+        background-color: #fff;
+    }
+    .buy-segment .old-current-price {
+        margin-left: 10px;
+        color: #9b9b9b;
+        font-weight: 400;
+    }
+    .buy-segment em {
+        font-style: normal;
+    }
+    .buy-segment .old-current-price .price-value {
+        font-size: 18px;
+    }
+    .buy-segment .buy-wrapper {
+        position: absolute;
+        width: 100%;
+        top: 6px;
+        right: 10px;
+    }
+    .buy-segment .newcustom-btn {
+        float: right;
+        margin-left: 10px;
+    }
+    .buy-segment .privilege-btn {
+        float: right;s
+    }
+    .buy-segment .text {
+        float: left;
+        width: 73px;
+    }
+    .buy-segment .buy-btn {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0;
+        color: #fff;
+        text-align: center;
+        display: block;
+        height: 34px;
+        background-color: #f24;
+        border: 1px solid #f24;
+        line-height: 32px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        font-size: 15px;
+    }
+    .buy-segment .newcustom-btn .buy-btn {
+        background-color: #ffa800;
+        border: 1px solid #ffa800;
+    }
+    .dn {
+        display: none;
+    }
+
+    .box_swipe{
+        overflow:hidden;
+        position:relative;
+    }
+    .box_swipe>ol{
+        height:20px;
+        position: relative;
+        z-index:10;
+        margin-top:-25px;
+        text-align:right;
+        padding-right:20px;
+        background-color:rgba(0,0,0,0.5);
+    }
+    .box_swipe>ol>li{
+        display:inline-block;
+        margin:5px;
+        width:10px;
+        height:10px;
+        background-color:#757575;
+        border-radius: 10px;
+    }
+    .box_swipe>ol>li.on{
+        background-color:#ffffff;
+    }
+
+    /* wechat ui start */
+    .weui_mask {
+        position: fixed;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .weui_dialog {
+        position: fixed;
+        z-index: 13;
+        width: 85%;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background-color: #FAFAFC;
+        text-align: center;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    .weui_dialog_hd {
+        padding: 1.2em 0 .5em;
+    }
+    .weui_dialog_confirm .weui_dialog .weui_dialog_hd {
+        padding: 1.2em 20px .5em;
+    }
+    .weui_dialog_title {
+        font-weight: 400;
+        font-size: 17px;
+    }
+    .weui_dialog_bd {
+        padding: 0 20px;
+        font-size: 15px;
+        color: #888;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .weui_dialog_confirm .weui_dialog .weui_dialog_bd {
+        text-align: left;
+    }
+    .weui_dialog_ft {
+        position: relative;
+        line-height: 42px;
+        margin-top: 20px;
+        font-size: 17px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    .weui_dialog_ft a {
+        display: block;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        color: #3CC51F;
+        text-decoration: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .weui_dialog_ft:after {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 1px;
+        border-top: 1px solid #D5D5D6;
+        color: #D5D5D6;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: scaleY(0.5);
+        transform: scaleY(0.5);
+    }
+    .weui_btn_dialog.default {
+        color: #353535;
+    }
+    .weui_btn_dialog.primary {
+        color: #0BB20C;
+    }
+    .weui_dialog_confirm .weui_dialog_ft a {
+        position: relative;
+    }
+    .weui_dialog_confirm .weui_dialog_ft a:after {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 100%;
+        border-left: 1px solid #D5D5D6;
+        color: #D5D5D6;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: scaleX(0.5);
+        transform: scaleX(0.5);
+    }
+    .buy-segment .privilege-btn1 {
+        float: left;
+        width: 53px;
+        margin-top: 3px;
+        margin-left: 28px;
+    }
+    .buy-segment .privilege-btn2 {
+        float: left;
+        width: 53px;
+        top: -3px;
+    }
+    .privilege-btn1 img{
+        width: 68%;
+    }
+    .cart_btn .cart-icon, .footer-action-icon {
+        background-image: url({{ img_host }}/images/youli/order_detail_021.jpg);
+        background-repeat: no-repeat;
+    }
+    .footer-action-icon {
+        width: 22px;
+        height: 25px;
+        display: block;
+        margin: 0 auto 2px;
+        padding-bottom: 4px;
+        overflow: hidden;
+        background-size: 23.8px;
+    }
+    .icon-store {
+        background-position: 0 -134px;
+    }
+    .icon-store2 {
+        background-position: 0 -164px;
+    }
+    </style>
+</head>
+<body class="good-detail-page" mon="position=detail">
+    <article mon="deal_id=11240677">
+        <section id="j-detail-image" class="detail-image-wrap">
+            <div class="detail-image">
+                <div id="banner_box" class="box_swipe" style="visibility: visible;">
+                    <ul>
+                        {% for image in project.images %}
+                        <li>
+                            <img src="{{ api_host }}{{ image.url }}" style="width:100%;height:220px;" class="imgg">
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <ol>
+                        {% for image in project.images %}<li{% if loop.first %} class="on"{% endif %}></li>{% endfor %}
+                    </ol>
+                </div>
+            </div>
+            <div id="j-detail-title" class="title-wrap">
+                <h3 class="title">{% if project.tenant %}{{ project.tenant.abbreviation }}{% endif %}&nbsp;&nbsp;({{ project.name or "未知项目" }})</h3>
+                <p class="desc">{{ project.xiangmuyoushi }}</p>
+            </div>
+        </section>
+        <section class="detail-desc">
+            <div id="j-detail-topten"></div>
+            <div id="j-detail-privilege">
+                <div class="privilege-list">
+                    <div class="privilege-item">
+                        <a href="javascript:;" class="fake-icon">
+                            <em class="text">{{ project.address }}</em>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="j-detail-policy" class="policy" mon="area=policy">
+                <span class="rule-item amount">人均消费：{{ project.price_text }}</span>
+                <span class="rule-item expired">预约返利：{{ project.fanli_text }}</span>
+                <span class="rule-item recommend">推荐返利：{{ project.tuijian_fanli_text }}</span>
+                <span class="rule-item mianyuyue">电话：<a href="tel:{{ project.phone }}" style="color:#f34">{{ project.phone }}</a></span>
+            </div>
+        </section>
+        <section class="panel-notice">
+            <div class="hd">消费提示</div>
+            <div class="struct-data">
+                {{ project.description|safe }}
+            </div>
+        </section>
+        <section class="buy-btn-wrap" id="j-buy-segment">
+            <div class="buy-segment">
+                <div class="buy-wrapper has-newcustom">
+                    <div class="newcustom-btn">
+                        <a id="wap-buybtn-for-book" class="buy-btn" href="javascript:void(0)">
+                            <span class="text">我要预约</span>
+                        </a>
+                    </div>
+                    <div class="privilege-btn">
+                        <a id="wap-buybtn-for-share" class="buy-btn" href="javascript:void(0)">
+                            <span class="text">推荐分享</span>
+                        </a>
+                    </div>
+                    <div class="privilege-btn1">
+                        <a href="/projects">
+                            <img src="{{ img_host }}/images/youli/order_detail_013.jpg">
+                        </a>
+                    </div>
+                    <div class="privilege-btn2">
+                        <span class="footer-action-icon icon-store"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </article>
+    <div class="weui_dialog_alert" id="dialog_share" style="opacity: 1;display: none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">推荐分享</strong></div>
+            <div class="weui_dialog_bd">点击微信窗口右上角分享菜单进行分享，分享后获得分享优惠。</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui_dialog_alert" id="dialog_bind" style="opacity: 1;display: none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">实名绑定</strong></div>
+            <div class="weui_dialog_bd"><input type="text" style="width:90%" class="name" placeholder="输入真实姓名，返利用" /></div>
+            <div class="weui_dialog_bd"><input type="text" style="width:90%" class="mobile" placeholder="输入手机号" /></div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog default cancel">取消</a>
+                <a href="javascript:;" class="weui_btn_dialog primary ok">确定</a>
+            </div>
+        </div>
+    </div>
+    <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{{ img_host }}/js/swipe.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        new Swipe(document.getElementById("banner_box"), {
+            speed:500,
+            auto:3000,
+            callback: function(){
+                var lis = $(this.element).next("ol").children();
+                lis.removeClass("on").eq(this.index).addClass("on");
+            }
+        });
+
+        var data = {debug:false,appId:'{{ info.appid }}',timestamp:{{ info.timestamp }},nonceStr:'{{ info.noncestr }}',signature:'{{ info.signature }}'};
+        var p_url = '{{ info.url }}';
+        data.jsApiList = [
+        'checkJsApi',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'openCard',
+        'chooseWXPay'
+        ];
+        wx.config(data);
+        var wxData={
+            title: "{{ project.name or "预约优惠" }}", // 分享标题
+            link: "{{ host }}go2auth/project?project_id={{ project.id }}&share_id={{ openid }}",  // 分享链接
+            desc: "{{ project.name or "预约优惠" }}，预约就返{{ project.fanli_text }}", // 分享描述
+            imgUrl: "{{ api_host }}{{ project.main_image_url }}", // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                var project_id = "{{ project.id }}";
+                var openid = "{{ openid }}";
+
+                $.ajax({
+                    url:"/recommend_project",
+                    type:"POST",
+                    data:{project_id:project_id,openid:openid},
+                    dataType:'json',
+                    success:function(json){
+                        if(!json.success) {
+                            alert(json.message);
+                            return;
+                        }
+
+                        alert("分享成功");
+                    }
+                });
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        };
+        wx.ready(function(){
+            wx.showOptionMenu();
+            wx.onMenuShareAppMessage(wxData);
+            wx.onMenuShareTimeline(wxData);
+        });
+        wx.error(function(res){
+        });
+
+        $("#wap-buybtn-for-book").click(function(){
+            var project_id = "{{ project.id }}";
+            var openid = "{{ openid }}";
+
+            $.ajax({
+                url:"/subscribe_project",
+                type:"POST",
+                data:{project_id:project_id,openid:openid},
+                dataType:'json',
+                success:function(json){
+                    if(!json.success) {
+                        if (json.code == -1) {
+                            //绑定用户信息
+                            var $dialog = $('#dialog_bind');
+                            $("#dialog_bind .ok").prop("disabled", false);
+                            $dialog.fadeIn(200);
+                            $dialog.find('.cancel').one('click', function () {
+                                $dialog.fadeOut(200);
+                            });
+                            $dialog.find('.ok').one('click', function () {
+                                $("#dialog_bind .ok").prop("disabled", true);
+                                
+                                var name = $("#dialog_bind .name").val();
+                                var mobile = $("#dialog_bind .mobile").val();
+                        
+                                $.ajax({
+                                    url:"/update_user_info_and_subscribe",
+                                    type:"POST",
+                                    data:{name:name,mobile:mobile,project_id:project_id,openid:openid},
+                                    dataType:'json',
+                                    success:function(json){
+                                        if(!json.success) {
+                                            alert(json.message);
+                                            return;
+                                        }
+                                        $("#dialog_bind .name").prop("disabled", true);
+                        
+                                        alert("预约成功");
+                                    }
+                                });
+                                $dialog.fadeOut(200);
+                            });
+                        }
+                        return;
+                    }
+
+                    alert("预约成功");
+                }
+            });
+        });
+
+        $("#wap-buybtn-for-share").click(function(){
+            var $dialog = $('#dialog_share');
+            $dialog.fadeIn(200);
+            $dialog.find('.weui_btn_dialog').one('click', function () {
+                $dialog.fadeOut(200);
+            });
+        });
+        
+        //收藏
+        var is_active = 0;
+        var get_favorite = function() {
+            $.ajax({
+                url:"/get_favorite",
+                type:"GET",
+                data:{project_id:"{{ project.id }}"},
+                dataType:'json',
+                success:function(json){
+                    if (json.success) {
+                        is_active = json.row.is_active;
+                        if (is_active == 1) {
+                            $(".privilege-btn2 span").removeClass("icon-store").addClass("icon-store2");
+                        }
+                    }
+                }
+            });
+        };
+        get_favorite();
+        
+        $(".privilege-btn2").click(function() {
+            if (is_active == 0) {
+                is_active = 1;
+                $(".privilege-btn2 span").removeClass("icon-store").addClass("icon-store2");
+            } else {
+                is_active = 0;
+                $(".privilege-btn2 span").removeClass("icon-store2").addClass("icon-store");
+            }
+            $.ajax({
+                url:"/save_favorite",
+                type:"POST",
+                data:{project_id:"{{ project.id }}",is_active:is_active},
+                dataType:'json',
+                success:function(json){
+                }
+            });
+        });
+        
+        {% if share_id && share_id != openid %}
+        var visit_project = function() {
+            var project_id = "{{ project.id }}";
+            var openid = "{{ openid }}";
+            var share_id = "{{ share_id }}";
+
+            $.ajax({
+                url:"/visit_project",
+                type:"POST",
+                data:{project_id:project_id,openid:openid,share_id:share_id},
+                dataType:'json',
+                success:function(json){
+                }
+            });
+        };
+        setTimeout(visit_project,2000);
+        {% endif %}
+    });
+    </script>
+</body>
+</html>

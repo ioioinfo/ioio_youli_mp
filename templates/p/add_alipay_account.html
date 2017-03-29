@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>绑定银行卡</title>
+    <script src="{{ image_host }}/js/react.min.js"></script>
+    <script src="{{ image_host }}/js/react-dom.min.js"></script>
+    <script src="{{ image_host }}/js/browser.min.js"></script>
+    <script src="{{ image_host }}/js/jquery-3.1.1.min.js"></script>
+    <style media="screen">
+    @media screen and (max-width:640px){
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        html,body{
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: "\5FAE\8F6F\96C5\9ED1","微软雅黑" Tahoma, Verdana, sans-serif, ;
+            background: #f3f3f3;
+            position: relative;
+        }
+        a{
+            text-decoration: none;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        li{
+            list-style: none;
+            font-size: 12px;
+        }
+        input{
+            height: 25px;
+            line-height: 25px;
+            font-size: 14px;
+        }
+
+        .footer{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            font-size: 14px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: #01A9F2;
+            text-align: center;
+            color: #fff;
+        }
+        .cardInfor{
+            width: 94%;
+            margin: 0 auto;
+        }
+        .cardInfor .warning{
+            color: #8C8C8C;
+            padding-top: 20px;
+        }
+        .cardInput{
+            background: #fff;
+            color: #101010;
+            border-radius: 4px;
+            text-indent: 10px;
+            margin-top: 20px;
+        }
+        .cardInput p{
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 1px solid #F4F4F4;
+        }
+        .cardInput p input{
+            width: 60%;
+            border: none;
+            text-indent: 10px;
+            outline: none;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+    class Card extends React.Component {
+
+        render() {
+            return (
+                <div>
+
+                <div className="cardInfor">
+                <p className="warning">请绑定本人的支付宝帐号</p>
+                <div className="cardInput">
+                <p>真实姓名：<input type="text" id="truename" placeholder="张三" value="{{ user.name }}" disabled /></p>
+                <p>支付宝帐号：<input type="text" id="username" placeholder="请输入支付宝账户帐号" /></p>
+                </div>
+                </div>
+                <Footer/>
+                </div>
+            );
+        }
+    };
+
+    class Footer extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleSubmit = this.handleSubmit.bind(this);
+        }
+        handleSubmit(e) {
+            var truename = $("#truename").val();
+            var username = $("#username").val();
+            
+            if (!truename || !username) {
+                alert("请填写信息");
+                return;
+            }
+            
+            $.ajax({
+                url:"/add_alipay_account",
+                type:"POST",
+                data:{truename:truename,username:username},
+                dataType:'json',
+                success:function(json){
+                    alert("添加成功");
+                    location.href = "withdraw_accounts";
+                }
+            });
+        }
+        render() {
+            return (
+                <div className="footer" onClick={this.handleSubmit}>
+                提交
+                </div>
+            );
+        }
+    };
+    ReactDOM.render(
+        <Card/>,
+        document.getElementById("example")
+    );
+    </script>
+</body>
+</html>

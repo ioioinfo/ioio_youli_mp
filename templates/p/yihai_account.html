@@ -1,0 +1,457 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>个人中心</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<style type="text/css">
+.home-head .hd a.back:after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 50%;
+    top: 50%;
+    margin: -5px 0 0 -5px;
+    border-left: 1px solid #fff!important;
+    border-top: 1px solid #fff!important;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    z-index: 10;
+}
+* {
+	box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+body, ul, ol, li, p, h1, h2, h3, h4, h5, h6, select, input, textarea, dl, dt, dd, td {
+    margin: 0;
+    padding: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: 400;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+}
+body, input, select, textarea {
+    color: #333;
+    font: 62.5%/1.5 arial;
+}
+body {
+    min-width: 320px;
+    background-color: #f7f7f7;
+}
+header, nav, article, section, aside, hgroup, footer {
+    display: block;
+}
+.home-head {
+    position: relative;
+    min-width: 320px;
+    min-height: 220px;
+    background: url(images/youli/yihai_07.png) no-repeat 0 0;
+    background-size: cover;
+}
+section[role="main"] {
+    border-bottom: 1px solid rgba(255, 255, 255, 0);
+}
+.home-head .hd {
+    position: relative;
+}
+a {
+    color: #0075c2;
+    text-decoration: none;
+}
+.home-head .bd {
+    position: relative;
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+}
+ul, ol {
+    list-style: none;
+}
+.orange {
+    color: #ee5909;
+}
+.home-head .ft {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    background-color: rgba(0,0,0,.3);
+}
+.home-head .hd a {
+    position: absolute;
+    top: 0;
+    min-width: 44px;
+    height: 44px;
+}
+.home-head .hd a.back {
+    left: 0;
+    color: #fff;
+    line-height: 200px;
+    text-align: center;
+    overflow: hidden;
+}
+.home-head .hd a.message-enter {
+    right: 0;
+}
+.home-head .hd h1 {
+    font-size: 1.8em;
+    line-height: 44px;
+    font-weight: 400;
+    text-align: center;
+    color: #fff;
+}
+.icon-m {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px 20px;
+}
+.icon-message {
+    background-image: url(images/youli/yihai_01.png);
+}
+.home-head .hd .icon-m {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -9px 0 0 -9px;
+}
+.face {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+.bg-avatar {
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 70px 70px;
+    background-image: url(images/youli/yihai_02.png);
+}
+.home-head .bd .face {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border-radius: 70px;
+}
+.home-head .bd .user-rating {
+    margin-top: -5px;
+    padding-bottom: 4px;
+}
+.home-head .bd .user-level {
+    font-size: 1.3em;
+    color: #fff;
+}
+.arrow {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border: solid #d2d2d2;
+    border-width: 1px 1px 0 0;
+}
+.aw-right {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.home-head .bd .arrow {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    margin-top: -9px;
+    width: 18px;
+    height: 18px;
+    border: solid #fff;
+    border-width: 2px 2px 0 0;
+}
+.home-head .bd .user-rating p {
+    display: inline-block;
+    background-color: #283545;
+    font-size: 1.2em;
+    line-height: 16px;
+    height: 16px;
+    padding: 0 2px 0 3px;
+    border-radius: 10px;
+    color: #fff;
+}
+.bg-heart {
+    background-repeat: no-repeat;
+    background-position: -75px 0;
+    background-size: 165px 12px;
+    background-image: url(images/youli/yihai_03.png);
+}
+.bg-heart-5 {
+    background-position: -75px 0;
+}
+.home-head .bd .user-rating span {
+    float: right;
+    width: 14px;
+    height: 12px;
+    margin-top: 2px;
+    font-size: 0;
+    line-height: 0;
+    overflow: hidden;
+}
+.home-head .ft li:last-child {
+    border-right: none;
+}
+.home-head .ft li {
+    -webkit-box-flex: 1;
+    width: 1%;
+    border-right: 1px solid rgba(255,255,255,.3);
+}
+.home-head .ft a {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    min-height: 50px;
+    color: #fff;
+    text-align: center;
+}
+.home-head .ft-panel {
+    position: relative;
+    padding-left: 25px;
+    text-align: left;
+}
+.icon-deposit {
+    background-image: url(images/youli/yihai_04.png);
+}
+.icon-points {
+    background-image: url(images/youli/yihai_05.png);
+}
+.icon-freedays {
+    background-image: url(images/youli/yihai_06.png);
+}
+.home-head .ft-panel .icon-m {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-right: 5px;
+    vertical-align: text-bottom;
+}
+.home-head .ft-panel p {
+    min-height: 16px;
+    line-height: 16px;
+    padding-top: 4px;
+    font-size: 1.3em;
+}
+.home-head .ft-panel p:last-child {
+    padding-top: 0;
+    font-size: 1.2em;
+}
+.mod {
+    margin: 20px 0;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    background-color: #fff;
+}
+.panel {
+    width: 100%;
+}
+.btn-large-wrap {
+    margin: 20px 10px;
+}
+.panel > li, .panel > .item {
+    border-bottom: 1px solid #eaeaea;
+}
+.panel .item {
+    display: -webkit-box;
+    -webkit-box-align: center;
+    padding: 0 15px;
+}
+.item-list > .item {
+    margin-left: 15px;
+    padding-left: 0;
+}
+.panel > li:last-child, .panel > .item:last-child {
+    border-bottom: none;
+}
+.icon-order {
+    background-image: url(images/youli/yihai_08.png);
+}
+.panel .item .item-bd {
+    display: block;
+    -webkit-box-flex: 1;
+    padding: 13px 0;
+    font-size: 1.6em;
+    line-height: normal;
+    border: none;
+    background-color: #fff;
+    color: #333;
+}
+.icon-orderchauffeur {
+    background-image: url(images/youli/yihai_09.png);
+}
+.icon-orderinternational {
+    background-image: url(images/youli/yihai_10.png);
+}
+.icon-promotion {
+    background-image: url(images/youli/yihai_11.png);
+}
+.icon-gift {
+    background-image: url(images/youli/yihai_12.png);
+}
+.icon-creditcard {
+    background-image: url(images/youli/yihai_13.png);
+}
+.icon-invoice {
+    background-image: url(images/youli/yihai_14.png);
+}
+.icon-illegally {
+    background-image: url(images/youli/yihai_15.png);
+}
+.icon-about {
+    background-image: url(images/youli/yihai_16.png);
+}
+.icon-setting {
+    background-image: url(images/youli/yihai_17.png);
+}
+.ui-btn {
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+}
+.btn-large {
+    padding: 7px 10px;
+    font-size: 1.6em;
+}
+.btn-orange {
+    border: 1px solid #ee5909;
+    background-color: #ee5909;
+}
+</style>
+</head>
+<body onselectstart="return true;" ondragstart="return false;">
+	<div class="">
+		<section class="home-head ">
+			<div class="hd">
+				<a href="/" class="back " ng-if="sourceMobile === 'Mobile'">返回</a>
+				<a href="" class="message-enter">
+					<span class="icon-m icon-message"></span>
+				</a>
+				<h1>我的一嗨</h1>
+			</div>
+			<a class="bd" ng-href="" href="">
+				<div class="face bg-avatar"></div>
+				<div class="user-rating">
+					<p><span class="bg-heart bg-heart 5"></span>爱车指数</p>
+				</div>
+				<p class="user-level ng-binding">普卡会员</p>
+				<div class="arrow aw-right"></div>
+			</a>
+			<ul class="ft">
+				<li>
+					<a href="">
+						<div class="ft-panel">
+							<span class="icon-m icon-deposit"></span>
+							<p>余额</p>
+							<p class="orange ng-binding">0.00</p>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<div class="ft-panel">
+							<span class="icon-m icon-points"></span>
+							<p>积分</p>
+							<p class="orange ">0</p>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<div class="ft-panel">
+							<span class="icon-m icon-freedays"></span>
+							<p>免费天数</p>
+							<p class="orange ng-binding" style="text-align: center;">0</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<section role="main" class="">
+			<div class="mod panel item-list">
+				<a class="item" href="">
+					<span class="icon-m icon-order">
+					</span>
+					<p class="item-bd">自驾订单</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item ">
+					<span class="icon-m icon-orderchauffeur"></span>
+					<p class="item-bd">专车订单</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item" href="">
+					<span class="icon-m icon-orderinternational"></span>
+					<p class="item-bd">国际租车订单</p>
+					<span class="arrow aw-right"></span>
+				</a>
+			</div>
+			<div class="mod panel item-list">
+				<a class="item" href="">
+					<span class="icon-m icon-promotion"></span>
+					<p class="item-bd">优惠劵
+						<span class="">(<span class="orange ng-binding">1</span>)</span>
+					</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item" href="">
+					<span class="icon-m icon-gift"></span>
+					<p class="item-bd">我的礼品卡</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item" href="">
+					<span class="icon-m icon-creditcard"></span>
+					<p class="item-bd">信用卡</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item" href="">
+					<span class="icon-m icon-invoice"></span>
+					<p class="item-bd">常用发票</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item" href="">
+					<span class="icon-m icon-illegally"></span>
+					<p class="item-bd">违章记录</p>
+					<span class="arrow aw-right"></span>
+				</a>
+			</div>
+			<div class="mod panel item-list">
+				<a class="item" href="">
+					<span class="icon-m icon-about"></span>
+					<p class="item-bd">关于一嗨</p>
+					<span class="arrow aw-right"></span>
+				</a>
+				<a class="item" href="">
+					<span class="icon-m icon-setting"></span>
+					<p class="item-bd">设置</p>
+					<span class="arrow aw-right"></span>
+				</a>
+			</div>
+			<div class="btn-large-wrap">
+				<a class="ui-btn btn-large btn-orange">退出登录</a>
+			</div>
+		</section>
+	</div>
+</body>
+</html>
