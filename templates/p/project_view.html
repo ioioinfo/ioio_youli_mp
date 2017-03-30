@@ -881,6 +881,7 @@
                 data:{project_id:"{{ project.id }}",is_active:is_active},
                 dataType:'json',
                 success:function(json){
+                    if (!json.success) {alert(json.message);}
                 }
             });
         });
