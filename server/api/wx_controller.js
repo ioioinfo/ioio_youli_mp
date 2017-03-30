@@ -695,8 +695,34 @@ exports.register = function(server, options, next) {
                 var idcardno = request.payload.idcardno;
 
                 server.plugins.services.youli.get_user(openid, function(err,user) {
-                    if (!user.mobile || !user.name) {
-                        //需要注册
+                    //用户不存在，创建用户
+                    if (err) {
+                        var nickname = "未关注";
+                        var sex = "1";
+                        var headimgurl = "http://211.149.248.241:18101/images/header.png";
+                        var unionid = "";
+                        
+                        server.plugins.services.youli.bind_user(openid,nickname,sex,headimgurl,unionid, function(err,result) {
+                            console.log(result);
+                            
+                            //需要绑定信息
+                            server.plugins.services.youli.update_user_info(openid, name, idcardno, mobile, function(err,content) {
+                                if (err) {
+                                    return reply({success:false,message:"更新客户信息失败"});
+                                }
+                                server.plugins.services.youli.subscribe_project(openid, project_id, function(err,result) {
+                                    if (err) {
+                                        return reply({success:false,code:1,message:"预约失败"});
+                                    }
+                                    if (!result.success) {
+                                        return reply({success:false,code:1,message:result.message});
+                                    }
+                                    return reply({success:true,code:0,message:"ok"});
+                                });
+                            });
+                        });
+                    } else if (!user.mobile || !user.name) {
+                        //需要绑定信息
                         server.plugins.services.youli.update_user_info(openid, name, idcardno, mobile, function(err,content) {
                             if (err) {
                                 return reply({success:false,message:"更新客户信息失败"});
@@ -782,6 +808,7 @@ exports.register = function(server, options, next) {
             }
         },
 
+        //用户确认金额
         {
             method: 'POST',
             path: '/order_yonghu_confirm',

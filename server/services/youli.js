@@ -19,8 +19,10 @@ var nav = function(server) {
 
                     if (body["success"]) {
                         user = body["user"];
+                        cb(false,user);
+                    } else {
+                        cb(true,user);
                     }
-                    cb(err,user);
                 } else {
                     cb(true,{message:"网络错误"});
                 }
