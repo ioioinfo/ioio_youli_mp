@@ -808,16 +808,17 @@ exports.register = function(server, options, next) {
                     if (!openid) {
                         return reply({success:false,message:"请在微信中访问"});
                     }
-                    //保存图片
+                    //异步保存图片
                     var url = "http://127.0.0.1:6899/save_media";
-                    var data = {platform_id:'youli',media_id:server_id,'path':'C:/uuinfo/node/scm_node/static/images/youli/media'};
+                    var data = {platform_id:'youli',media_id:server_id,'path':'D:/uuinfo/ioio/ioio_youli_admin/public/images/'};
                     
                     uu_request.do_post_method(url, data, function(err, content) {
-                        var file_name = content.file_name;
-                        server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_id
-                            , file_name, shensu_reason, function(err,projects) {
-                            return reply({success:true,message:"ok"});
-                        });
+                    });
+                    
+                    var file_name = media_id + ".png";
+                    server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_id
+                        , file_name, shensu_reason, function(err,projects) {
+                        return reply({success:true,message:"ok"});
                     });
                 });
             }
