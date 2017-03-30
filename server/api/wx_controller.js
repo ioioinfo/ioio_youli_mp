@@ -815,7 +815,7 @@ exports.register = function(server, options, next) {
                     uu_request.do_post_method(url, data, function(err, content) {
                     });
                     
-                    var file_name = media_id + ".png";
+                    var file_name = server_id + ".png";
                     server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_id
                         , file_name, shensu_reason, function(err,projects) {
                         return reply({success:true,message:"ok"});
