@@ -139,6 +139,113 @@
                     margin-left: 20px;
                     color: #70B42C;
                 }
+                .WithdrawDeposit_zhifubao .addCard{
+                    float: right;
+                    margin-right: 10px;
+                }
+
+                /*银行卡弹出层*/
+                .WithdrawDeposit{
+                    width: 94%;
+                    height: 150px;
+                    position: absolute;
+                    left: 3%;
+                    bottom: 65px;
+                    background: rgb(112,180,44);
+                    color: #fff;
+                    border-radius: 4px;
+                }
+                .WithdrawDeposit .WithdrawDeposit_bank{
+                    width: 90%;
+                    margin: 5px auto 0;
+                }
+                .WithdrawDeposit .WithdrawDeposit_bank input{
+                    height: 32px;
+                    line-height: 32px;
+                    border: none;
+                    border-radius: 4px;
+                    text-indent: 10px;
+                }
+                .WithdrawDeposit .WithdrawDeposit_zhifubao{
+                    width: 90%;
+                    margin: 27px auto 0;
+                    text-align: none;
+
+                }
+                .WithdrawDeposit .WithdrawDeposit_zhifubao input{
+                    margin-right: 15px;
+                    border-radius: 50%;
+                }
+                .WithdrawDeposit .WithdrawDeposit_money{
+                    width: 90%;
+                    margin: 20px auto 0;
+                }
+                .WithdrawDeposit .WithdrawDeposit_money input{
+                    width: 237px;
+                    border: none;
+                    height: 32px;
+                    line-height: 32px;
+                    border-radius: 4px;
+                    text-indent: 10px;
+                }
+                /*银行卡弹出层下拉框样式*/
+            .dropDown{
+                  position: relative;
+                  display: inline-block;
+                }
+                .dropDown .dropDown_name{
+                  display: inline-block;
+                  padding: 6px 12px;
+                  margin-bottom: 0;
+                  font-size: 14px;
+                  font-weight: 400;
+                  line-height: 1.42857143;
+                  text-align: center;
+                  white-space: nowrap;
+                  vertical-align: middle;
+                  background-image: none;
+                }
+
+                .dropDown .dropDown_name .caret{
+                  display: inline-block;
+                  width: 0;
+                  height: 0;
+                  vertical-align: middle;
+                  border-top: 4px dashed;
+                  border-right: 4px solid transparent;
+                  border-left: 4px solid transparent;
+                }
+                .dropDown .dropDownChild{
+                  position: absolute;
+                  top: 100%;
+                  left: -73px;
+                  z-index: 1000;
+                  min-width: 160px;
+                  height: 98px;
+                  overflow: auto;
+                  padding: 5px 0;
+                  margin: 2px 0 0;
+                  font-size: 14px;
+                  text-align: left;
+                  background-color: #fff;
+                  border: 1px solid rgba(0,0,0,.15);
+                  border-radius: 4px;
+                  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+                }
+                .dropDown .dropDownChild .dropDownChild_name{
+                  display: block;
+                  padding: 3px 20px;
+                  clear: both;
+                  font-weight: 400;
+                  line-height: 1.42857143;
+                  white-space: nowrap;
+                  color: #666;
+                }
+                .dropDown .dropDownChild .dropDownChild_name:hover{
+                  color: #262626;
+                  text-decoration: none;
+                  background-color: #f5f5f5;
+                }
             }
         </style>
     </head>
@@ -207,7 +314,7 @@
           }
           componentDidMount(){
               var amountitem=[];
-                
+
             {% for row in rows %}
                 {% if row.receipt_amount !=0 %}
                 amountitem.push({type:"2", img:"{{ image_host }}/images/youli/fanli1.png",name1:"新东方",name2:"{{ row.body }}",money:"{{ row.receipt_amount }}",time:"{{ row.add_time_text }}"});
@@ -294,14 +401,83 @@
         };
         // 底部
         class Footer extends React.Component {
+            constructor(props) {
+                super(props);
+                this.handleClick1=this.handleClick1.bind(this);
+                // 二级导航状态
+                this.state={show:false};
+            }
+            handleClick1(e){
+                this.setState({show:!this.state.show});
+            }
+          render() {
+              var a = "";
+              if(this.state.show){
+                  a =  <WithdrawDeposit/>;
+              }
+              return (
+                  <div className="footer-wrap">
+                      <div className="footer" onClick={this.handleClick1} setSelected={this.setSelected} selected={this.state.selected}>提现</div>
+                      {a}
+                  </div>
+              );
+          }
+        };
+
+        //点击 提现弹出层有银行卡  WithdrawDeposit提现
+        class WithdrawDeposit extends React.Component {
           render() {
               return (
-                <div className="footer">
-                    提现
+                <div className="WithdrawDeposit">
+
+                    <p className="WithdrawDeposit_bank">
+                        <input type="text" name="" disabled="disabled" placeholder="选择已有账户"/>
+                        <DropDown items={items} />
+                    </p>
+                    <p className="WithdrawDeposit_zhifubao"><input type="checkbox" name="" /><span>8920***491</span><span className="addCard"><a href="withdraw_accounts">添加银行卡</a></span></p>
+                    <p className="WithdrawDeposit_money"><input type="text" name=""   placeholder="请输入提现金额" /></p>
                 </div>
               );
           }
         };
+
+        // 银行卡下拉弹出层
+        class DropDown extends React.Component {
+          constructor(props) {
+              super(props);
+              this.handleClick=this.handleClick.bind(this);
+              // 二级导航状态
+              this.state={show:false};
+          }
+          handleClick(e){
+              this.setState({show:!this.state.show});
+          }
+          render() {
+              var d=(<div className="dropDownChild">{this.props.items.map(item => (
+                  <DropDownChild item={item}  />))
+              }</div>)
+              if(!this.state.show){
+                d="";
+              }
+              return (
+              <div className="dropDown">
+                <p className="dropDown_name" onClick={this.handleClick} setSelected={this.setSelected} selected={this.state.selected}>选择已有账户<span className="caret"></span></p>
+                {d}
+              </div>
+              );
+          }
+        };
+        class DropDownChild extends React.Component {
+          render() {
+              return (
+              <p className="dropDownChild_name">{this.props.item.acount}</p>
+              );
+          }
+        };
+
+        // 银行卡下拉菜单数组
+        var  items = [{acount:"1122234234"},{acount:"1122234234"},{acount:"1122234234"},{acount:"1122234234"},{acount:"1122234234"}];
+         // 返回到页面
         ReactDOM.render(
           <Amount/>,
           document.getElementById("example")
