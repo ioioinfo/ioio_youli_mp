@@ -320,6 +320,22 @@ ul, ol, li {
     color: #676767;
     padding-bottom: 5px;
 }
+.message_reminding{
+	position: relative;
+}
+.message_reminding .news_number{
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+	border: none;
+	border-radius: 50%;
+	background: #FF0000;
+	color: #fff;
+	text-align: center;
+	position: absolute;
+	top: 13px;
+	right: 40px;
+}
 </style>
 </head>
 <body onselectstart="return true;" ondragstart="return false;">
@@ -393,10 +409,11 @@ ul, ol, li {
                         </li>
 					</div>
                     <div>
-                        <li>
+                        <li class="message_reminding">
                             <a href="my_messages" class="link_coupon">
                                 <span>&nbsp;</span>站内信
                             </a>
+							<span class="news_number">99</span>
                         </li>
                     </div>
 					<div>

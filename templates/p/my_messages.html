@@ -71,10 +71,11 @@
         }
         .newsTime span{
           display: inline-block;
-          padding: 3px 9px;
+          padding: 2px 5px;
           background: #BEBEBE;
           color: #fff;
           border-radius: 3px;
+          font-size: 12px;
         }
         .newsInfor{
           background: #fff;
@@ -82,8 +83,8 @@
           padding: 10px;
         }
         .newsTitle{
-          width: 80%;
-          padding: 10px 0;
+          width: 82%;
+          padding-left: 10px;
           font-size: 16px;
           color: #000;
           font-weight: 400;
@@ -91,6 +92,7 @@
           white-space:nowrap;
           overflow:hidden;
           text-overflow:ellipsis;
+          font-size: 14px;
         }
         .newsimg{
           display: inline-block;
@@ -104,7 +106,6 @@
         .newsword{
           display: inline-block;
           width: 82%;
-          vertical-align: top;
           padding-left: 10px;
           font-size: 12px;
           line-height: 20px;
@@ -121,7 +122,7 @@
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="{{ image_host }}/js/react.min.js"></script>
 <script src="{{ image_host }}/js/react-dom.min.js"></script>
-<script src="{{ image_host }}/js/react/youli/mp_message.js"></script>
+<script src="{{ image_host }}/js/browser.min.js"></script>
 <script type="text/javascript">
 $(function() {
     var data = {debug:false,appId:'{{ info.appid }}',timestamp:{{ info.timestamp }},nonceStr:'{{ info.noncestr }}',signature:'{{ info.signature }}'};
@@ -147,6 +148,81 @@ $(function() {
     wx.error(function(res){
     });
 });
+</script>
+<script type="text/babel">
+// 框架
+class Warp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {items: []};
+    }
+    componentDidMount() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({items: data.rows});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    }
+    render() {
+        return (
+            <div className="wrap">
+                <Header length={this.state.items.length} />
+                <Middle items={this.state.items} />
+            </div>
+        );
+    }
+};
+// 头部
+class Header extends React.Component {
+    render() {
+        return (
+            <div className="header">
+            <span className="jiantou"><img src="images/youli/jiantou.png" alt="" /></span>
+            <span className="title">消息(<span>{this.props.length}</span>)</span>
+            <span className="menu"><img src="images/youli/shouye1.png" alt="" /></span>
+            </div>
+        );
+    }
+};
+// 中间部分
+class Middle extends React.Component {
+    render() {
+        return (
+            <div className="middle">
+            {this.props.items.map(item => (
+                <News item={item} />
+            ))
+        }
+        </div>
+    );
+}
+};
+// 中间消息
+class News extends React.Component {
+render() {
+    return (
+        <div className="news">
+        <p className="newsTime"><span>{this.props.item.message_time_text}</span></p>
+        <div className="newsInfor">
+        <p className="newsTitle">{this.props.item.message_type_name}</p>
+        <div className="newscontent">
+        <p className="newsword">{this.props.item.body}</p>
+        </div>
+        </div>
+        </div>
+    );
+}
+};
+ReactDOM.render(
+<Warp url="get_my_messages" />,
+document.getElementById("app")
+);
 </script>
 </body>
 </html>
