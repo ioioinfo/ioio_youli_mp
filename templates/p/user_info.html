@@ -190,7 +190,12 @@ $(function() {
     //是否实名验证
     $("#name").prop("disabled", {{ user.realname or false }});
 
+    var processing = false;
+    
 	$("#btn_save").click(function(){
+	    if (processing) {return;}
+	    processing = true;
+	    
         var name = $("#name").val();
         var mobile = $("#mobile").val();
         var idcardno = $("#idcardno").val();
@@ -207,6 +212,7 @@ $(function() {
                 }
                 $("#name").prop("disabled", true);
 
+                processing = false;
                 alert("保存成功");
                 if ("{{ hb }}") {
                     location.href = "project/{{ hb }}";

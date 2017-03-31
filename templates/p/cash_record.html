@@ -317,7 +317,7 @@
 
             {% for row in rows %}
                 {% if row.receipt_amount !=0 %}
-                amountitem.push({type:"2", img:"{{ image_host }}/images/youli/fanli1.png",name1:"新东方",name2:"{{ row.body }}",money:"{{ row.receipt_amount }}",time:"{{ row.add_time_text }}"});
+                amountitem.push({type:"2", img:"{{ image_host }}/images/youli/fanli1.png",name1:"",name2:"{{ row.body }}",money:"{{ row.receipt_amount }}",time:"{{ row.add_time_text }}"});
                 {% endif %}
             {% endfor %}
               this.setState({amountitem:amountitem});
@@ -434,7 +434,7 @@
                         <input type="text" name="" disabled="disabled" placeholder="选择已有账户"/>
                         <DropDown items={items} />
                     </p>
-                    <p className="WithdrawDeposit_zhifubao"><input type="checkbox" name="" /><span>8920***491</span><span className="addCard"><a href="withdraw_accounts">添加银行卡</a></span></p>
+                    <p className="WithdrawDeposit_zhifubao"><input type="checkbox" name="" /><span>8920***491</span><span className="addCard"><a href="withdraw_accounts">添加帐号</a></span></p>
                     <p className="WithdrawDeposit_money"><input type="text" name=""   placeholder="请输入提现金额" /></p>
                 </div>
               );

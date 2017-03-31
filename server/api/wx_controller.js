@@ -73,10 +73,11 @@ exports.register = function(server, options, next) {
             console.log("cookie openid:"+openid);
             cb(openid);
         }else {
-            page_get_access_token(request, function(openid) {
-                console.log("code openid:"+openid);
-                cb(openid);
-            });
+            cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
+            //page_get_access_token(request, function(openid) {
+//                console.log("code openid:"+openid);
+//                cb(openid);
+//            });
         }
     };
 
@@ -275,6 +276,7 @@ exports.register = function(server, options, next) {
             }
         },
 
+        //项目列表
         {
             method: 'GET',
             path: '/projects',
@@ -489,6 +491,9 @@ exports.register = function(server, options, next) {
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         var ep = eventproxy.create("rows","balance",function(rows,balance) {
                             user.balance_amount = balance.balance_amount;
+                            
+                            //查询项目信息
+                            
                             
                             jsapi_ticket(request, function(info) {
                                 var params = {openid:openid,user:user,info:info,rows:rows};
@@ -898,6 +903,7 @@ exports.register = function(server, options, next) {
             }
         },
         
+        //获取站内信
         {
             method: 'GET',
             path: '/get_my_messages',
@@ -910,6 +916,24 @@ exports.register = function(server, options, next) {
                             return reply({success:false,message:"error"});
                         }
                         return reply({success:true,rows:rows});
+                    });
+                });
+            }
+        },
+        
+        //获取站内信数量
+        {
+            method: 'GET',
+            path: '/get_my_message_count',
+            handler: function(request, reply) {
+                var state;
+
+                page_get_openid(request, function(openid) {
+                    server.plugins.services.youli.get_my_message_count(openid, function(err,row) {
+                        if (err) {
+                            return reply({"success":false,"message":"error"});
+                        }
+                        return reply({"success":true,"row_number":row.row_number});
                     });
                 });
             }

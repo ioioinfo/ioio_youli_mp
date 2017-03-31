@@ -346,6 +346,26 @@ var nav = function(server) {
             });
         },
         
+        //获取消息数量
+        get_my_message_count: function(openid,cb) {
+            var url = host + "message_count?openid=%s";
+            url = util.format(url,openid);
+
+            uu_request.get(url, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+                    if (info["success"]) {
+                        var row = info["row"];
+                        cb(false,row);
+                    } else {
+                        cb(true,{"row_number":0});
+                    }
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
+        
         //提现帐号
         get_withdraw_account: function(wx_user_id,cb) {
             var url = host + "get_withdraw_account?wx_user_id=%s";

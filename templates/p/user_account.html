@@ -335,6 +335,7 @@ ul, ol, li {
 	position: absolute;
 	top: 13px;
 	right: 40px;
+	display: none;
 }
 </style>
 </head>
@@ -413,7 +414,7 @@ ul, ol, li {
                             <a href="my_messages" class="link_coupon">
                                 <span>&nbsp;</span>站内信
                             </a>
-							<span class="news_number">99</span>
+							<span class="news_number"></span>
                         </li>
                     </div>
 					<div>
@@ -475,6 +476,24 @@ $(function() {
         wx.hideOptionMenu();
     });
     wx.error(function(res){
+    });
+    
+    //查询消息数量
+    $.ajax({
+        url:"/get_my_message_count",
+        type:"GET",
+        data:{},
+        dataType:'json',
+        success:function(json){
+            if (json.success) {
+                var row_number = json.row_number;
+                if (row_number > 0) {
+                    $(".news_number").html(row_number);
+                    $(".news_number").show();
+                }
+            } else {
+            }
+        }
     });
 });
 </script>
