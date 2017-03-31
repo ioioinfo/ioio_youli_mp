@@ -251,6 +251,34 @@
     </head>
     <body>
         <div id="example"></div>
+        <script>
+          function list_amount_info1(cb) {
+            var amountitem=[];
+            
+            {% for row in rows %}
+                {% if row.receipt_amount !=0 %}
+                {% if row.entity %}
+                amountitem.push({type:"2", img:"{{ image_host }}/images/{{ row.entity.main_image_url }}",name1:"{{ row.entity.tenant.abbreviation }}",name2:"{{ row.body }}",money:"{{ row.receipt_amount }}",time:"{{ row.add_time_text }}"});
+                {% else %}
+                amountitem.push({type:"2", img:"{{ image_host }}/images/youli/fanli1.png",name1:"{{ row.entity.tenant.abbreviation }}",name2:"{{ row.body }}",money:"{{ row.receipt_amount }}",time:"{{ row.add_time_text }}"});
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+            
+            cb(amountitem);
+          }
+          
+          function list_amount_info2(cb) {
+            var amountitem=[];
+            {% for row in rows %}
+                {% if row.payment_amount !=0 %}
+    amountitem.push({name2:"{{ row.body }}",account:"892***",money:"{{ row.payment_amount }}",time:"{{ row.add_time_text }}"});
+                {% endif %}
+            {% endfor %}
+            
+            cb(amountitem);
+          }
+        </script>
         <script type="text/babel">
         // 账单
         class Amount extends React.Component {
@@ -313,14 +341,9 @@
               this.state = {amountitem:[]};
           }
           componentDidMount(){
-              var amountitem=[];
-
-            {% for row in rows %}
-                {% if row.receipt_amount !=0 %}
-                amountitem.push({type:"2", img:"{{ image_host }}/images/youli/fanli1.png",name1:"",name2:"{{ row.body }}",money:"{{ row.receipt_amount }}",time:"{{ row.add_time_text }}"});
-                {% endif %}
-            {% endfor %}
-              this.setState({amountitem:amountitem});
+              list_amount_info1(function(amountitem) {
+                  this.setState({amountitem:amountitem});
+              }.bind(this));
           }
           render() {
               return (
@@ -358,13 +381,9 @@
               this.state = {amountitem:[]};
           }
           componentDidMount(){
-              var amountitem=[];
-            {% for row in rows %}
-                {% if row.payment_amount !=0 %}
-                amountitem.push({name2:"{{ row.body }}",account:"892***",money:"{{ row.payment_amount }}",time:"{{ row.add_time_text }}"});
-                {% endif %}
-                {% endfor %}
-              this.setState({amountitem:amountitem});
+              list_amount_info2(function(amountitem) {
+                  this.setState({amountitem:amountitem});
+              }.bind(this));
           }
           render() {
               return (

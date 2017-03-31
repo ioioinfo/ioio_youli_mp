@@ -73,11 +73,11 @@ exports.register = function(server, options, next) {
             console.log("cookie openid:"+openid);
             cb(openid);
         }else {
-            cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
-            //page_get_access_token(request, function(openid) {
-//                console.log("code openid:"+openid);
-//                cb(openid);
-//            });
+            // cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
+            page_get_access_token(request, function(openid) {
+                console.log("code openid:"+openid);
+                cb(openid);
+            });
         }
     };
 
@@ -493,11 +493,25 @@ exports.register = function(server, options, next) {
                             user.balance_amount = balance.balance_amount;
                             
                             //查询项目信息
-                            
-                            
-                            jsapi_ticket(request, function(info) {
-                                var params = {openid:openid,user:user,info:info,rows:rows};
-                                return reply.view(get_view("cash_record.html"), params).state('cookie', state, cookie_options);
+                            var ids = [];
+                            _.each(rows,function(row) {
+                                ids.push(row.entity_id);
+                            });
+                            server.plugins.services.youli.list_project_by_ids(ids,function(err,projects) {
+                                var m_project = {};
+                                _.each(projects,function(project) {
+                                    m_project[project.id] = project;
+                                });
+                                _.each(rows,function(row) {
+                                    if ("project" == row.entity_type) {
+                                        row.entity = m_project[row.entity_id];
+                                    }
+                                });
+                                
+                                jsapi_ticket(request, function(info) {
+                                    var params = {openid:openid,user:user,info:info,rows:rows};
+                                    return reply.view(get_view("cash_record.html"), params).state('cookie', state, cookie_options);
+                                });
                             });
                         });
                         //查询用户余额

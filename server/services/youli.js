@@ -152,6 +152,24 @@ var nav = function(server) {
                 }
             });
         },
+        
+        //根据id数组查询项目信息
+        list_project_by_ids: function(ids,cb) {
+            var url = host + "list_project_by_ids?ids=" + JSON.stringify(ids);
+            uu_request.get(url, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+                    var rows = [];
+            
+                    if (info["success"]) {
+                        rows = info["rows"];
+                    }
+                    cb(err,rows);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
 
         get_project: function(openid,project_id,cb) {
             var url = host + "project/%s?openid=%s";
