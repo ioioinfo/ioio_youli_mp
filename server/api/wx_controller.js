@@ -125,6 +125,7 @@ exports.register = function(server, options, next) {
         }
     };
 
+    //get user info from wechat
     var get_user_info = function(openid,cb) {
         if (!openid) {
             return cb("");
