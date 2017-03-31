@@ -50,7 +50,12 @@
         height: 25px;
         line-height: 25px;
         font-size: 14px;
+        border: 1px solid #999;
     }
+    input[type="submit"],input[type="reset"],input[type="button"],button {
+       -webkit-appearance: none;
+    }
+
     .hide { display: none; }
     .wx_wrap {
         min-height: 375px;
@@ -64,17 +69,12 @@
         color: #999;
         font-size: 12px;
     }
-    @media only screen and (max-height: 480px){
-        .wx_wrap {
-            min-height: 360px;
-        }
-    }
 
     .wx_wrap {
         position: relative;
     }
     .my_order_wrap {
-        overflow: hidden;
+        overflow: auto;
     }
     .my_order_inner {
         position: relative;
