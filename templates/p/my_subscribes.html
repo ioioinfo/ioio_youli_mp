@@ -570,10 +570,7 @@
             <div class="weui_dialog_bd"><input type="text" style="width:90%" class="shensu_reason" placeholder="输入申诉原因" /></div>
             <div class="weui_dialog_bd">上传消费发票图片</div>
             <div class="weui_dialog_img">
-                <p><span>+</span><br/>添加图片 <img src="images/" alt=""><span class="weui_dialog_delect">-</span></p>
-                <p><img src="images/" alt=""><span class="weui_dialog_delect">-</span></p>
-                <p><img src="images/" alt=""><span class="weui_dialog_delect">-</span></p>
-                <p><img src="images/" alt=""><span class="weui_dialog_delect">-</span></p>
+                <p class="upload"><span>+</span><br/>添加图片 <img src="" alt=""></p>
             </div>
             <div class="weui_dialog_bd"><img src="" class="upload_img" style="width:50px;height:50px;display:none;" /></div>
             <div class="weui_dialog_ft">
@@ -629,10 +626,10 @@
                         [<%- row.project.address %>]
                     </div>
                     <div class="deal-item-info-descriptions text-overflow"><%- row.project.xiangmuyoushi %></div>
-                    <div class="deal-item-info-distances deal-distance-wrapper"><%-row.project.recommends_count %>人推荐</div>
+                    <div class="deal-item-info-distances deal-distance-wrapper"><%-row.project.recommends_count || 0 %>人推荐</div>
                     <div class="deal-item-info-price">
                         <span class="view-count">
-                            <span class="yishou"><%- row.project.subscribes_count %>人预定</span>
+                            <span class="yishou"><%- row.project.subscribes_count || 0 %>人预定</span>
                         </span>
                         <span class="promotion2">
                             <span class="scale">预约时间</span>
@@ -679,7 +676,7 @@ $(function() {
     var states = {"yiyuyue":"已预约","daiqueren":"待确认","yiqueren":"已确认","shensuzhong":"申诉中","wancheng":"完成"};
     var process_list;
     var rebate_list;
-    var localIds;
+    var wx_images = [];
 
     var get_my_unfinished_subscribes = function() {
         $.ajax({
@@ -741,16 +738,11 @@ $(function() {
         });
     };
 
-    var order_yonghu_shensu = function(project_subscribe_id,server_id,$dialog) {
-        var shensu_reason = $(".shensu_reason").val();
-        if (shensu_reason == "") {
-            alert("请输入申诉原因");
-            return;
-        }
+    var order_yonghu_shensu = function(project_subscribe_id,shensu_reason,server_ids,$dialog) {
         $.ajax({
             url:"/order_yonghu_shensu",
             type:"POST",
-            data:{project_subscribe_id:project_subscribe_id,server_id:server_id,shensu_reason:shensu_reason},
+            data:{project_subscribe_id:project_subscribe_id,server_ids:JSON.stringify(server_ids),shensu_reason:shensu_reason},
             dataType:'json',
             success:function(json){
                 if (json.success) {
@@ -801,34 +793,67 @@ $(function() {
             var $dialog = $('#dialog_confirm_complain');
             $dialog.fadeIn(200);
             //上传图片
-            $dialog.find('.upload').one('click', function () {
+            $dialog.find('.upload').click(function () {
+                //判断图片数量
+                if (wx_iamges.length == 3) {
+                    alert("最多只能选择3张照片.");
+                    return;
+                }
                 //选择图片
                 wx.chooseImage({
                     count: 1, // 默认9
                     sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
                     sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
                     success: function (res) {
-                        localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                        $dialog.find('.upload_img').attr('src',localIds[0]).show();
+                        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        _.each(localIds,function(localId) {
+                            $dialog.find('.weui_dialog_img').append('<p data-id="'+localId+'"><img src="'+localId+'" alt=""><span class="weui_dialog_delect">-</span></p>');
+                            
+                            //上传图片
+                            wx.uploadImage({
+                                localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                                isShowProgressTips: 1, // 默认为1，显示进度提示
+                                success: function (res) {
+                                    var server_id = res.serverId; // 返回图片的服务器端ID
+                                    alert(server_id);
+                                    wx_images.push({"localId":localId,"server_id":server_id});
+                                }
+                            });
+                        });
+                        
+                        $(".weui_dialog_delect").click(function(e) {
+                            var p = $(this).parent();
+                            var localId = p.data("id");
+                            
+                            for (var i=0;i<wx_images.length;i++) {
+                                if (localId == wx_images[i].localId) {
+                                    wx_images.splice(i,1);
+                                }
+                            }
+                            p.remove();
+                        });
                     }
                 });
             });
             $dialog.find('.cancel').one('click', function () {
                 $dialog.fadeOut(200);
             });
-            $dialog.find('.ok').one('click', function () {
-                if (!localIds || localIds[0].length == 0) {
-                    alert('请上传消费发票');
+            $dialog.find('.ok').click(function () {
+                var shensu_reason = $(".shensu_reason").val();
+                if (shensu_reason == "") {
+                    alert("请输入申诉原因");
                     return;
                 }
-                wx.uploadImage({
-                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
-                    isShowProgressTips: 1, // 默认为1，显示进度提示
-                    success: function (res) {
-                        var server_id = res.serverId; // 返回图片的服务器端ID
-                        order_yonghu_shensu(project_subscribe_id,server_id,$dialog);
-                    }
+                if (!wx_images || wx_images.length == 0) {
+                    alert('请上传消费发票或小票');
+                    return;
+                }
+                
+                var server_ids = [];
+                _.each(wx_images,function(wx_image) {
+                    server_ids.push(wx_image.server_id);
                 });
+                order_yonghu_shensu(project_subscribe_id,shensu_reason,server_ids,$dialog);
             });
         });
     };

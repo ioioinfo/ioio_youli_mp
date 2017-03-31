@@ -848,8 +848,12 @@ exports.register = function(server, options, next) {
             path: '/order_yonghu_shensu',
             handler: function(request, reply) {
                 var project_subscribe_id = request.payload.project_subscribe_id;
-                var server_id = request.payload.server_id;
+                var server_ids = request.payload.server_ids;
                 var shensu_reason = request.payload.shensu_reason;
+                
+                if (!server_ids) {
+                    return reply({"success":false,"message":"param server_ids is null"});
+                }
 
                 page_get_openid(request, function(openid) {
                     if (!openid) {
@@ -857,14 +861,14 @@ exports.register = function(server, options, next) {
                     }
                     //异步保存图片
                     var url = "http://127.0.0.1:6899/save_media";
-                    var data = {platform_id:'youli',media_id:server_id,'path':'D:/uuinfo/ioio/ioio_youli_admin/public/images/'};
+                    var data = {platform_id:'youli',media_id:server_ids,'path':'D:/uuinfo/ioio/ioio_youli_admin/public/images/'};
                     
                     uu_request.do_post_method(url, data, function(err, content) {
                     });
                     
-                    var file_name = server_id + ".png";
-                    server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_id
-                        , file_name, shensu_reason, function(err,projects) {
+                    var file_names = server_ids + ".png";
+                    server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_ids
+                        , file_names, shensu_reason, function(err,projects) {
                         return reply({success:true,message:"ok"});
                     });
                 });

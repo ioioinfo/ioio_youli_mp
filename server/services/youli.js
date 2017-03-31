@@ -299,9 +299,9 @@ var nav = function(server) {
             });
         },
 
-        order_yonghu_shensu: function(openid,project_subscribe_id,server_id,file_name,shensu_reason,cb) {
+        order_yonghu_shensu: function(openid,project_subscribe_id,server_ids,file_names,shensu_reason,cb) {
             var url = host + "order/shensu";
-            var data = {openid:openid,project_subscribe_id:project_subscribe_id,server_id:server_id,file_name:file_name
+            var data = {openid:openid,project_subscribe_id:project_subscribe_id,server_ids:server_ids,file_names:file_names
                 ,shensu_reason:shensu_reason};
             uu_request.request(url, data, function(err, response, body) {
                 if (!err && response.statusCode === 200) {
