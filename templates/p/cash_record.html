@@ -140,14 +140,12 @@
                     color: #70B42C;
                 }
                 .WithdrawDeposit_zhifubao .addCard{
-                    float: right;
                     margin-right: 10px;
                 }
 
                 /*银行卡弹出层*/
                 .WithdrawDeposit{
                     width: 94%;
-                    height: 150px;
                     position: absolute;
                     left: 3%;
                     bottom: 65px;
@@ -157,7 +155,7 @@
                 }
                 .WithdrawDeposit .WithdrawDeposit_bank{
                     width: 90%;
-                    margin: 5px auto 0;
+                    margin: 20px auto 20px;
                 }
                 .WithdrawDeposit .WithdrawDeposit_bank input{
                     height: 32px;
@@ -167,10 +165,32 @@
                     text-indent: 10px;
                 }
                 .WithdrawDeposit .WithdrawDeposit_zhifubao{
-                    width: 90%;
-                    margin: 27px auto 0;
+                    width: 20%;
+                    margin: 17px 0 ;
+                    display: inline-block;
                     text-align: none;
-
+                    margin-left: 5%;
+                }
+                .WithdrawDeposit .WithdrawDeposit_submit{
+                    width: 20%;
+                    margin: 17px 0 ;
+                    display: inline-block;
+                    text-align: none;
+                    float: right;
+                }
+                .WithdrawDeposit .WithdrawDeposit_zhifubao .addCard a{
+                    color: #000;
+                    font-size: 12PX;
+                }
+                .WithdrawDeposit .WithdrawDeposit_submit input{
+                    padding: 4px 6px;
+                    border-radius: 3px;
+                    outline: none;
+                    background: #EAEBEA;
+                    color: #456051;
+                    border: none;
+                    font-size: 14px;
+                    height: 22px;
                 }
                 .WithdrawDeposit .WithdrawDeposit_zhifubao input{
                     margin-right: 15px;
@@ -178,16 +198,27 @@
                 }
                 .WithdrawDeposit .WithdrawDeposit_money{
                     width: 90%;
-                    margin: 20px auto 0;
+                    margin: 20px auto 10px;
                 }
                 .WithdrawDeposit .WithdrawDeposit_money input{
-                    width: 237px;
+                    width:149px;
                     border: none;
                     height: 32px;
                     line-height: 32px;
                     border-radius: 4px;
-                    text-indent: 10px;
+                    background: none;
+                    border-bottom: 1px solid #fff;
+                    border-radius: 6px;
+                    outline: none;
+                    color:#fff;
                 }
+                input::-webkit-input-placeholder {
+                    color:    #fff;
+                }
+                input:-moz-placeholder {
+                    color:    #fff;
+                }
+
                 /*银行卡弹出层下拉框样式*/
             .dropDown{
                   position: relative;
@@ -195,7 +226,7 @@
                 }
                 .dropDown .dropDown_name{
                   display: inline-block;
-                  padding: 6px 12px;
+                  padding: 6px 12px 6px 0;
                   margin-bottom: 0;
                   font-size: 14px;
                   font-weight: 400;
@@ -218,9 +249,9 @@
                 .dropDown .dropDownChild{
                   position: absolute;
                   top: 100%;
-                  left: -73px;
+                  left: 0;
                   z-index: 1000;
-                  min-width: 160px;
+                  min-width: 249px;
                   height: 98px;
                   overflow: auto;
                   padding: 5px 0;
@@ -246,6 +277,15 @@
                   text-decoration: none;
                   background-color: #f5f5f5;
                 }
+
+                /*下拉框银行卡图标样式*/
+                .dropDownChild_name img{
+                    width: 22px;
+                    height: 22px;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    vertical-align: middle;
+                }
             }
         </style>
     </head>
@@ -254,7 +294,7 @@
         <script>
           function list_amount_info1(cb) {
             var amountitem=[];
-            
+
             {% for row in rows %}
                 {% if row.receipt_amount !=0 %}
                 {% if row.entity %}
@@ -264,10 +304,10 @@
                 {% endif %}
                 {% endif %}
             {% endfor %}
-            
+
             cb(amountitem);
           }
-          
+
           function list_amount_info2(cb) {
             var amountitem=[];
             {% for row in rows %}
@@ -275,7 +315,7 @@
     amountitem.push({name2:"{{ row.body }}",account:"892***",money:"{{ row.payment_amount }}",time:"{{ row.add_time_text }}"});
                 {% endif %}
             {% endfor %}
-            
+
             cb(amountitem);
           }
         </script>
@@ -445,16 +485,51 @@
 
         //点击 提现弹出层有银行卡  WithdrawDeposit提现
         class WithdrawDeposit extends React.Component {
+            constructor(props) {
+                super(props);
+                this.setSelected=this.setSelected.bind(this);
+                this.handleClick=this.handleClick.bind(this);
+                // 二级导航状态
+                this.state={row:[]};
+            }
+            handleClick(e){
+                if(!this.state.item){
+                    alert("请选择育有帐号");
+                    return;
+                }
+                var cashnum=$(".WithdrawDeposit_money input").val();
+                if(!cashnum){
+                    alert("请填写提现金额");
+                    return;
+                }
+
+            }
+            setSelected(item){
+                this.setState({item:item,show:false});
+            }
+            componentDidMount() {
+                $.ajax({
+                  url: "/list_withdraw_account",
+                  dataType: 'json',
+                  type: 'GET',
+                  success: function(data) {
+                      this.setState({row: data.rows});
+                  }.bind(this),
+                  error: function(xhr, status, err) {
+                  }.bind(this)
+              });
+
+            }
           render() {
               return (
                 <div className="WithdrawDeposit">
 
-                    <p className="WithdrawDeposit_bank">
-                        <input type="text" name="" disabled="disabled" placeholder="选择已有账户"/>
-                        <DropDown items={items} />
-                    </p>
-                    <p className="WithdrawDeposit_zhifubao"><input type="checkbox" name="" /><span>8920***491</span><span className="addCard"><a href="withdraw_accounts">添加帐号</a></span></p>
-                    <p className="WithdrawDeposit_money"><input type="text" name=""   placeholder="请输入提现金额" /></p>
+                                    <p className="WithdrawDeposit_bank">
+                                        <DropDown row={this.state.row} item={this.state.item} setSelected={this.setSelected}/>
+                                    </p>
+                                    <p className="WithdrawDeposit_money"><input type="text" name=""   placeholder="请输入提现金额" /></p>
+                                    <p className="WithdrawDeposit_zhifubao"><span className="addCard"><a href="withdraw_accounts">添加帐号</a></span></p>
+                                    <p className="WithdrawDeposit_submit"><input type="submit" name="" value="提 交" onClick={this.handleClick}/></p>
                 </div>
               );
           }
@@ -465,37 +540,63 @@
           constructor(props) {
               super(props);
               this.handleClick=this.handleClick.bind(this);
+              this.setSelected=this.setSelected.bind(this);
               // 二级导航状态
               this.state={show:false};
           }
           handleClick(e){
               this.setState({show:!this.state.show});
           }
+          setSelected(item){
+              this.setState({show:false});
+              this.props.setSelected(item);
+          }
           render() {
-              var d=(<div className="dropDownChild">{this.props.items.map(item => (
-                  <DropDownChild item={item}  />))
+              var d=(<div className="dropDownChild">{this.props.row.map(item => (
+                  <DropDownChild item={item} setSelected={this.setSelected} />))
               }</div>)
               if(!this.state.show){
                 d="";
               }
+              if (!this.props.item) {
+                  card_number = "选择已有账户";
+              } else {
+                  var card_number= this.props.item.card_number;
+                  if (!card_number) {
+                      card_number = this.props.item.account_username;
+                  }
+              }
+
               return (
               <div className="dropDown">
-                <p className="dropDown_name" onClick={this.handleClick} setSelected={this.setSelected} selected={this.state.selected}>选择已有账户<span className="caret"></span></p>
+                <p className="dropDown_name" onClick={this.handleClick} >{card_number}</p>
                 {d}
               </div>
               );
           }
         };
         class DropDownChild extends React.Component {
+            constructor(props) {
+                super(props);
+                this.handleClick=this.handleClick.bind(this);
+            }
+            handleClick(e){
+                this.props.setSelected(this.props.item);
+            }
           render() {
+              var img="images/"+this.props.item.card_type+".png";
+              var card_number= this.props.item.card_number;
+              if (!card_number) {
+                  card_number = this.props.item.account_username;
+              }
+
               return (
-              <p className="dropDownChild_name">{this.props.item.acount}</p>
+              <p className="dropDownChild_name" onClick={this.handleClick} ><span><img src={img} alt="" /></span>{card_number}</p>
               );
           }
         };
 
-        // 银行卡下拉菜单数组
-        var  items = [{acount:"1122234234"},{acount:"1122234234"},{acount:"1122234234"},{acount:"1122234234"},{acount:"1122234234"}];
+
          // 返回到页面
         ReactDOM.render(
           <Amount/>,
