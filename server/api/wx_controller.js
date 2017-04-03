@@ -555,7 +555,7 @@ exports.register = function(server, options, next) {
                         }
                         
                         server.plugins.services.youli.save_withdraw(user.id,account_id,amount,function(err,content) {
-                            if (err) {
+                            if (!content.success) {
                                 return reply({"success":false,"message":"金额不足"});
                             }
                             return reply({"success":true,"message":"ok"});
