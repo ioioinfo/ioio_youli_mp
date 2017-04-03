@@ -370,6 +370,7 @@
               return (
                 <div className="header">
                     可用余额：{{ user.balance_amount }}元
+                    提现申请金额：{{ user.withdraw_amount }}元
                 </div>
               );
           }
@@ -494,15 +495,31 @@
             }
             handleClick(e){
                 if(!this.state.item){
-                    alert("请选择育有帐号");
+                    alert("请选择提现帐号");
                     return;
                 }
-                var cashnum=$(".WithdrawDeposit_money input").val();
-                if(!cashnum){
+                var amount=$(".WithdrawDeposit_money input").val();
+                if(!amount){
                     alert("请填写提现金额");
                     return;
                 }
 
+                var account_id = this.state.item.id;
+                $.ajax({
+                  url: "/save_withdraw",
+                  dataType: 'json',
+                  data:{account_id:account_id,amount:amount},
+                  type: 'POST',
+                  success: function(data) {
+                    if (data.success) {
+                      alert("申请提现成功");
+                    } else {
+                      alert(data.message);
+                    }
+                  }.bind(this),
+                  error: function(xhr, status, err) {
+                  }.bind(this)
+                });
             }
             setSelected(item){
                 this.setState({item:item,show:false});
@@ -584,7 +601,7 @@
                 this.props.setSelected(this.props.item);
             }
           render() {
-              var img="images/"+this.props.item.card_type+".png";
+              var img="{{ image_host }}/images/youli/"+this.props.item.card_type+".png";
               var card_number= this.props.item.card_number;
               if (!card_number) {
                   card_number = this.props.item.account_username;

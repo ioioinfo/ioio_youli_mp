@@ -171,9 +171,20 @@
               this.state = {amountitem:[]};
           }
           componentDidMount(){
-              var amountitem=[{img:"images/img-15.jpg",name1:"新东方",name2:"考研英语政治强化集训营",name3:["baoge","baogebaoge"], money:"100",time:"2017 / 3 / 22"},
-                                {img:"images/img-15.jpg",name1:"新东方",name2:"考研英语政治强化集训营",name3:["老张","老李"], money:"100",time:"2017 / 3 / 22"}];
-              this.setState({amountitem:amountitem});
+	          $.ajax({
+	          	url: "/get_my_recommends",
+	          	dataType: 'json',
+	          	type: 'GET',
+	          	success: function(data) {
+		          	var amountitem = [];
+		          	if (data.rows) {
+			          	amountitem = data.rows;
+		          	}
+	          		this.setState({amountitem: amountitem});
+	          	}.bind(this),
+	          	error: function(xhr, status, err) {
+	          	}.bind(this)
+	          });
           }
           render() {
               return (
@@ -187,20 +198,20 @@
         };
         class AmountinforLi extends React.Component {
           render() {
-
+	          var img = "{{ image_host }}/images/" + this.props.item.main_image_url;
               return (
                 <li className="Amountinfor_li">
-                    <p className="Amountinfor_li_bottom">{this.props.item.time}</p>
+                    <p className="Amountinfor_li_bottom"></p>
                     <div className="Amountinfor_li_bottom_infor">
-                        <div className="Amountinfor_img"><img src={this.props.item.img} alt="" /></div>
+                        <div className="Amountinfor_img"><img src={img} alt="" /></div>
                         <div className="Amountinfor_li_right">
-                            <p className="Amountinfor_li_p1"><span>{this.props.item.name1}</span><span>({this.props.item.name2})</span></p>
-                            <p className="Amountinfor_li_p2">+ 返利 : &nbsp;￥<span>{this.props.item.money}</span></p>
+                            <p className="Amountinfor_li_p1"><span>{this.props.item.name}</span><span>({this.props.item.xiangmuyoushi})</span></p>
+                            <p className="Amountinfor_li_p2">+ 返利 : &nbsp;<span>{this.props.item.tuijian_fanli_text}</span></p>
                         </div>
                     </div>
                     <div className="Amountinfor_li_recommend">被推荐人：
-                    {this.props.item.name3.map(item => (
-                        <span>{item}</span>))
+                    {this.props.item.recommends.map(item => (
+                        <span>{item.nickname}</span>))
                     }
 
                     </div>

@@ -73,11 +73,11 @@ exports.register = function(server, options, next) {
             console.log("cookie openid:"+openid);
             cb(openid);
         }else {
-            cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
-            // page_get_access_token(request, function(openid) {
-            //     console.log("code openid:"+openid);
-            //     cb(openid);
-            // });
+            // cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
+            page_get_access_token(request, function(openid) {
+                console.log("code openid:"+openid);
+                cb(openid);
+            });
         }
     };
 
@@ -551,10 +551,13 @@ exports.register = function(server, options, next) {
                 page_get_openid(request, function(openid) {
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         if (err) {
-                            return reply("用户错误");
+                            return reply({"success":true,"message":"用户错误"});
                         }
                         
                         server.plugins.services.youli.save_withdraw(user.id,account_id,amount,function(err,content) {
+                            if (err) {
+                                return reply({"success":false,"message":"金额不足"});
+                            }
                             return reply({"success":true,"message":"ok"});
                         });
                     });
@@ -948,15 +951,25 @@ exports.register = function(server, options, next) {
                     }
                     //异步保存图片
                     var url = "http://127.0.0.1:6899/save_media";
-                    var data = {platform_id:'youli',media_id:server_ids,'path':'D:/uuinfo/ioio/ioio_youli_admin/public/images/'};
-                    
-                    uu_request.do_post_method(url, data, function(err, content) {
-                    });
-                    
-                    var file_names = server_ids + ".png";
-                    server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_ids
-                        , file_names, shensu_reason, function(err,projects) {
-                        return reply({success:true,message:"ok"});
+                    var media_ids = JSON.parse(server_ids);
+                    var file_names = [];
+                    get_token(function(token) {
+                        console.log(token);
+                        _.each(media_ids,function(media_id) {
+                            var file_name = media_id+".png";
+                            file_names.push(file_name);
+                            
+                            var data = {platform_id:'youli',token:token,media_id:media_id,'path':'D:/uuinfo/ioio/ioio_youli_admin/public/images/'};
+                            uu_request.do_post_method(url, data, function(err, content) {
+                            });
+                        });
+                        
+                        file_names = JSON.stringify(file_names);
+                        
+                        server.plugins.services.youli.order_yonghu_shensu(openid, project_subscribe_id, server_ids
+                            , file_names, shensu_reason, function(err,projects) {
+                            return reply({success:true,message:"ok"});
+                        });
                     });
                 });
             }
@@ -984,15 +997,29 @@ exports.register = function(server, options, next) {
 
                 page_get_openid(request, function(openid) {
                     state = {openid:openid};
+                    jsapi_ticket(request, function(info) {
+                        var params = {openid:openid,info:info};
+                        return reply.view(get_view("my_recommends.html"), params).state('cookie', state, cookie_options);
+                    });
+                });
+            }
+        },
+        
+        //我的推荐列表
+        {
+            method: 'GET',
+            path: '/get_my_recommends',
+            handler: function(request, reply) {
+                page_get_openid(request, function(openid) {
+                    if (!openid) {
+                        return reply({"success":false,"message":"openid is null"});
+                    }
                     server.plugins.services.youli.get_user(openid, function(err,user) {
-                        server.plugins.services.youli.get_my_recommends(user.id, function(err,projects) {
+                        server.plugins.services.youli.get_my_recommends(user.id, function(err,rows) {
                             if (err) {
-                                return reply.view(get_view("error.html"), projects);
+                                return reply({"success":false,"message":"error"});
                             }
-                            jsapi_ticket(request, function(info) {
-                                var params = {openid:openid,projects:projects,info:info};
-                                return reply.view(get_view("my_recommends.html"), params).state('cookie', state, cookie_options);
-                            });
+                            return reply({"success":true,"message":"ok","rows":rows});
                         });
                     });
                 });

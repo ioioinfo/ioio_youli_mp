@@ -797,7 +797,7 @@ $(function() {
             //上传图片
             $dialog.find('.upload').click(function () {
                 //判断图片数量
-                if (wx_iamges.length == 3) {
+                if (wx_images.length == 3) {
                     alert("最多只能选择3张照片.");
                     return;
                 }
@@ -817,7 +817,6 @@ $(function() {
                                 isShowProgressTips: 1, // 默认为1，显示进度提示
                                 success: function (res) {
                                     var server_id = res.serverId; // 返回图片的服务器端ID
-                                    alert(server_id);
                                     wx_images.push({"localId":localId,"server_id":server_id});
                                 }
                             });

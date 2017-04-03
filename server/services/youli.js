@@ -66,7 +66,7 @@ var nav = function(server) {
         },
         
         //保存提现申请
-        save_withdraw(account_id,amount,cb) {
+        save_withdraw(wx_user_id,account_id,amount,cb) {
             var url = host + "save_withdraw";
             var data = {wx_user_id:wx_user_id,account_id:account_id,amount:amount};
             uu_request.request(url, data, function(err, response, body) {
@@ -354,9 +354,9 @@ var nav = function(server) {
             });
         },
 
-        get_my_recommends: function(openid,cb) {
-            var url = host + "my_recommends?openid=%s";
-            url = util.format(url,openid);
+        get_my_recommends: function(wx_user_id,cb) {
+            var url = host + "my_recommends?wx_user_id=%s";
+            url = util.format(url,wx_user_id);
 
             uu_request.get(url, function(err, response, body) {
                 if (!err && response.statusCode === 200) {
