@@ -548,8 +548,16 @@ exports.register = function(server, options, next) {
                     return reply({"success":false,"message":"param amount is null"});
                 }
                 
-                server.plugins.services.youli.save_withdraw(account_id,amount,function(err,content) {
-                    return reply({"success":true,"message":"ok"});
+                page_get_openid(request, function(openid) {
+                    server.plugins.services.youli.get_user(openid, function(err,user) {
+                        if (err) {
+                            return reply("用户错误");
+                        }
+                        
+                        server.plugins.services.youli.save_withdraw(user.id,account_id,amount,function(err,content) {
+                            return reply({"success":true,"message":"ok"});
+                        });
+                    });
                 });
             }
         },
@@ -967,6 +975,7 @@ exports.register = function(server, options, next) {
             }
         },
 
+        //我的推荐
         {
             method: 'GET',
             path: '/my_recommends',
@@ -975,13 +984,15 @@ exports.register = function(server, options, next) {
 
                 page_get_openid(request, function(openid) {
                     state = {openid:openid};
-                    server.plugins.services.youli.get_my_recommends(openid, function(err,projects) {
-                        if (err) {
-                            return reply.view(get_view("error.html"), projects);
-                        }
-                        jsapi_ticket(request, function(info) {
-                            var params = {openid:openid,projects:projects,info:info};
-                            return reply.view(get_view("my_recommends.html"), params).state('cookie', state, cookie_options);
+                    server.plugins.services.youli.get_user(openid, function(err,user) {
+                        server.plugins.services.youli.get_my_recommends(user.id, function(err,projects) {
+                            if (err) {
+                                return reply.view(get_view("error.html"), projects);
+                            }
+                            jsapi_ticket(request, function(info) {
+                                var params = {openid:openid,projects:projects,info:info};
+                                return reply.view(get_view("my_recommends.html"), params).state('cookie', state, cookie_options);
+                            });
                         });
                     });
                 });
