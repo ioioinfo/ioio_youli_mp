@@ -490,8 +490,9 @@ exports.register = function(server, options, next) {
                 page_get_openid(request, function(openid) {
                     state = {openid:openid};
                     server.plugins.services.youli.get_user(openid, function(err,user) {
-                        var ep = eventproxy.create("rows","balance",function(rows,balance) {
+                        var ep = eventproxy.create("rows","balance","withdraw",function(rows,balance,withdraw) {
                             user.balance_amount = balance.balance_amount;
+                            user.withdraw_amount = withdraw.withdraw_amount;
                             
                             //查询项目信息
                             var ids = [];
@@ -519,11 +520,36 @@ exports.register = function(server, options, next) {
                         server.plugins.services.youli.find_user_balance(user.id,function(err,row) {
                             ep.emit("balance",row);
                         });
+                        //查询等待提现金额
+                        server.plugins.services.youli.find_user_withdraw_amount(user.id,function(err,row) {
+                            ep.emit("withdraw",row);
+                        });
                         //查询账号历史
                         server.plugins.services.youli.list_user_account(user.id,function(err,rows) {
                             ep.emit("rows",rows);
                         });
                     });
+                });
+            }
+        },
+        
+        //保存提现申请
+        {
+            method: 'POST',
+            path: '/save_withdraw',
+            handler: function(request,reply) {
+                var account_id = request.payload.account_id;
+                var amount = request.payload.amount;
+                
+                if (!account_id) {
+                    return reply({"success":false,"message":"param account_id is null"});
+                }
+                if (!amount) {
+                    return reply({"success":false,"message":"param amount is null"});
+                }
+                
+                server.plugins.services.youli.save_withdraw(account_id,amount,function(err,content) {
+                    return reply({"success":true,"message":"ok"});
                 });
             }
         },
@@ -550,6 +576,31 @@ exports.register = function(server, options, next) {
                                 var params = {openid:openid,user:user,info:info,rows:rows};
                                 return reply.view(get_view("withdraw_accounts.html"), params).state('cookie', state, cookie_options);
                             });
+                        });
+                    });
+                });
+            }
+        },
+        
+        //我的提现账户列表
+        {
+            method: 'GET',
+            path: '/list_withdraw_account',
+            handler: function(request, reply) {
+                var state;
+        
+                page_get_openid(request, function(openid) {
+                    state = {openid:openid};
+                    server.plugins.services.youli.get_user(openid, function(err,user) {
+                        if (err) {
+                            return reply("用户错误");
+                        }
+                        //判断用户是否实名绑定
+                        if (!user.mobile || !user.name) {
+                            return reply("未实名绑定");
+                        }
+                        server.plugins.services.youli.list_withdraw_account(user.id, function(err,rows) {
+                            return reply({"success":true,"message":"ok","rows":rows});
                         });
                     });
                 });

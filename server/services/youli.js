@@ -29,6 +29,7 @@ var nav = function(server) {
             });
         },
         
+        //查询账户余额
         find_user_balance: function(wx_user_id,cb) {
             var url = host + "find_user_balance?wx_user_id=" + wx_user_id;
             uu_request.get(url, function(err, response, body) {
@@ -43,6 +44,33 @@ var nav = function(server) {
                 } else {
                     cb(true,{message:"网络错误"});
                 }
+            });
+        },
+        
+        //查询等待提现金额
+        find_user_withdraw_amount: function(wx_user_id,cb) {
+            var url = host + "find_user_withdraw_amount?wx_user_id=" + wx_user_id;
+            uu_request.get(url, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+            
+                    var row = {};
+                    if (info["success"]) {
+                        row = info["row"];
+                    }
+                    cb(err,row);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
+        
+        //保存提现申请
+        save_withdraw(account_id,amount,cb) {
+            var url = host + "save_withdraw";
+            var data = {wx_user_id:wx_user_id,account_id:account_id,amount:amount};
+            uu_request.request(url, data, function(err, response, body) {
+                cb(err,body);
             });
         },
         
