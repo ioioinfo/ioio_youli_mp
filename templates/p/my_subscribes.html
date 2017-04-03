@@ -425,6 +425,7 @@
         padding: 0 48px 0 20px;
         display: flex;
         justify-content:space-between;
+
     }
     .weui_dialog .weui_dialog_img p{
         width: 20%;
@@ -433,9 +434,7 @@
         text-align: center;
         position: relative;
     }
-    .weui_dialog .weui_dialog_img p:first-child{
-        border: 1px solid #999;
-    }
+
     .weui_dialog .weui_dialog_img p .weui_dialog_delect{
         position: absolute;
         top: 3px;
@@ -452,6 +451,9 @@
        .weui_dialog .weui_dialog_img p img{
            width: 100%;
            height: 63.75px;
+           position: absolute;
+           top: 0;
+           left: 0;
        }
     .weui_dialog_confirm .weui_dialog .weui_dialog_bd {
         text-align: left;
@@ -808,7 +810,7 @@ $(function() {
                         var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                         _.each(localIds,function(localId) {
                             $dialog.find('.weui_dialog_img').append('<p data-id="'+localId+'"><img src="'+localId+'" alt=""><span class="weui_dialog_delect">-</span></p>');
-                            
+
                             //上传图片
                             wx.uploadImage({
                                 localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
@@ -820,11 +822,11 @@ $(function() {
                                 }
                             });
                         });
-                        
+
                         $(".weui_dialog_delect").click(function(e) {
                             var p = $(this).parent();
                             var localId = p.data("id");
-                            
+
                             for (var i=0;i<wx_images.length;i++) {
                                 if (localId == wx_images[i].localId) {
                                     wx_images.splice(i,1);
@@ -848,7 +850,7 @@ $(function() {
                     alert('请上传消费发票或小票');
                     return;
                 }
-                
+
                 var server_ids = [];
                 _.each(wx_images,function(wx_image) {
                     server_ids.push(wx_image.server_id);

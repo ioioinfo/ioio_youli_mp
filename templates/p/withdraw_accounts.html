@@ -41,6 +41,7 @@
             overflow: hidden;
             background: #fff;
             border-radius: 4px;
+            position: relative;
         }
         .zhifubao p{
             color: #989898;
@@ -80,7 +81,8 @@
             overflow: hidden;
             background: #94572C;
             border-radius: 4px;
-            color: #fff;
+            position: relative;
+            position: relative;
         }
         .bank1{
             width: 94%;
@@ -90,6 +92,7 @@
             background: #F9B49D;
             border-radius: 4px;
             color: #fff;
+            position: relative;
         }
         .footer{
             width: 100%;
@@ -117,6 +120,82 @@
             height: 60px;
             background:transparent;
         }
+        /*删除按钮*/
+        .remove_card{
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            text-align: center;
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+            border-radius: 50%;
+            background: red;
+            color: #fff;
+            display: inline-block;
+            font-weight: bolder;
+
+        }
+        .remove_card_ceng{
+            width: 60%;
+            position: absolute;
+            top: 100px;
+            left: 20%;
+            border-radius: 4px;
+            background: #fff;
+            z-index: 9999;
+        }
+        .remove_card_ceng p{
+            margin-top: 10px;
+            height: 18px;
+            line-height: 18px;
+            margin-left: 15px;
+
+        }
+        .remove_card_ceng .remove_card_ceng_title{
+            font-size: 14px;
+            color: #999;
+        }
+        .remove_card_ceng p input{
+            border: none;
+            border-bottom: 1px solid #999;
+            height: 18px;
+            line-height: 18px;
+            border-radius: 3px;
+            outline: none;
+            font-size: 12px;
+        }
+        .remove_card_ceng .remove_card_ceng_account input{
+            width: 80%;
+        }
+        .remove_card_ceng .remove_card_ceng_submit{
+            margin-bottom: 10px;
+            text-align: right;
+            margin-top: 22px;
+        }
+        .remove_card_ceng .remove_card_ceng_submit input{
+            padding: 2px 5px;
+            margin-right: 10px;
+
+        }
+        .remove_card_ceng .remove_card_ceng_submit input:first-child{
+            color: #999;
+        }
+        .remove_card_ceng .remove_card_ceng_submit input:last-child{
+            background: #00A9F2;
+            color: #fff;
+        }
+        .toumingceng{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            background: #808080;
+            opacity: 0.5;
+        }
     }
     </style>
 </head>
@@ -126,11 +205,21 @@
     class Account extends React.Component {
         constructor(props) {
             super(props);
-            this.state = {cardItems:[]};
+            this.setSelected = this.setSelected.bind(this);
+            this.deleteSelected = this.deleteSelected.bind(this);
+            this.state = {cardItems:[],status:"hide"};
+        }
+        setSelected(status){
+            this.setState({status:status});
+        };
+        // 删除银行卡方法
+        deleteSelected(index){
+            this.state.cardItems.splice(index,1);
+            this.setState({status:"hide"});
         }
         componentDidMount(){
             var cardItems = [];
-            
+
             {% for row in rows %}
             cardItems.push({"type":"{{ row.account_type_code }}","truename":"{{ row.account_truename }}"
                 ,"card_type":"{{ row.card_type }}"
@@ -141,9 +230,11 @@
         render() {
             return (
                 <div className="account">
-                {this.state.cardItems.map(item => (
-                    <BankCard item={item} />))
+                {this.state.cardItems.map((item , index) => (
+                    <BankCard item={item} index={index} setSelected={this.setSelected}/>))
                 }
+                <RemoveCard index={this.index} setSelected={this.setSelected} deleteSelected={this.deleteSelected} status={this.state.status}/>
+                <Toumingceng setSelected={this.setSelected} status={this.state.status}/>
                 <Footer1/>
                 <Footer/>
                 </div>
@@ -151,6 +242,14 @@
         }
     };
     class BankCard extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleClick = this.handleClick.bind(this);
+            this.state = {cardItems:[]};
+        }
+        handleClick(e){
+            this.props.setSelected(this.props.index);
+        }
         render() {
             var c = "zhifubao";
             if(this.props.item.type=="bank"){
@@ -159,15 +258,63 @@
             var img = "{{ image_host }}/images/youli/" + this.props.item.card_type + ".png";
             return (
                 <div className={c}>
-                <div className="zhifubaoImg"><img src={img} alt="" /></div>
-                <div className="zhifubaoInfor">
-                <p className="zhifubaoInfor_p1">{this.props.item.bankname}</p>
-                <p className="zhifubaoInfor_p2">{this.props.item.truename}</p>
-                <div className="zhifubaoInfor_p3">{this.props.item.card_number}</div>
-                </div>
+                    <div className="zhifubaoImg"><img src={img} alt="" /></div>
+                    <div className="zhifubaoInfor">
+                        <p className="zhifubaoInfor_p1">{this.props.item.bankname}</p>
+                        <p className="zhifubaoInfor_p2">{this.props.item.truename}</p>
+                        <div className="zhifubaoInfor_p3">{this.props.item.card_number}</div>
+                    </div>
+                    <p className="remove_card" onClick={this.handleClick}>-</p>
                 </div>
             );
         }
+    };
+
+    // 删除 银行卡 确认弹出层
+    class RemoveCard extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleClick = this.handleClick.bind(this);
+            this.handleClick1 = this.handleClick1.bind(this);
+        }
+        handleClick(e){
+            this.props.setSelected("hide");
+        }
+        handleClick1(e){
+            this.props.deleteSelected(this.props.index);
+        }
+        render() {
+            var ceng=<div></div>;
+            if(this.props.status!="hide"){
+                ceng=(<div className="remove_card_ceng">
+                    <p className="remove_card_ceng_title">确认删除此账户</p>
+
+                    <p className="remove_card_ceng_submit"><input type="submit" name="" value="取消" onClick={this.handleClick} /><input type="submit" name="" value="确定" onClick={this.handleClick1}/></p>
+                </div>);
+            }
+            return (
+                ceng
+            );
+        }
+    };
+    class Toumingceng extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleClick = this.handleClick.bind(this);
+        }
+        handleClick(e){
+            this.props.setSelected("hide");
+        }
+      render() {
+          var toumingceng=<div></div>;
+          if(this.props.status!="hide"){
+              toumingceng=(<div className="toumingceng" onClick={this.handleClick}></div>);
+          }
+
+          return (
+            toumingceng
+          );
+      }
     };
     class Footer1 extends React.Component {
         render() {
