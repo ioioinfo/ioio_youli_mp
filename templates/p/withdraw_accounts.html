@@ -214,6 +214,16 @@
         };
         // 删除银行卡方法
         deleteSelected(index){
+            var id = this.state.cardItems[index].id;
+            $.ajax({
+                url:"/delete_withdraw_account",
+                type:"POST",
+                data:{id:id},
+                dataType:'json',
+                success:function(json){
+                }
+            });
+            
             this.state.cardItems.splice(index,1);
             this.setState({status:"hide"});
         }
@@ -221,7 +231,7 @@
             var cardItems = [];
 
             {% for row in rows %}
-            cardItems.push({"type":"{{ row.account_type_code }}","truename":"{{ row.account_truename }}"
+            cardItems.push({"id":"{{ row.id }}","type":"{{ row.account_type_code }}","truename":"{{ row.account_truename }}"
                 ,"card_type":"{{ row.card_type }}"
                 ,"card_number":"{{ row.card_number or row.account_username }}","bankname":"{{ row.bankname }}"});
             {% endfor %}
@@ -233,7 +243,7 @@
                 {this.state.cardItems.map((item , index) => (
                     <BankCard item={item} index={index} setSelected={this.setSelected}/>))
                 }
-                <RemoveCard index={this.index} setSelected={this.setSelected} deleteSelected={this.deleteSelected} status={this.state.status}/>
+                <RemoveCard setSelected={this.setSelected} deleteSelected={this.deleteSelected} status={this.state.status}/>
                 <Toumingceng setSelected={this.setSelected} status={this.state.status}/>
                 <Footer1/>
                 <Footer/>
@@ -281,7 +291,7 @@
             this.props.setSelected("hide");
         }
         handleClick1(e){
-            this.props.deleteSelected(this.props.index);
+            this.props.deleteSelected(this.props.status);
         }
         render() {
             var ceng=<div></div>;

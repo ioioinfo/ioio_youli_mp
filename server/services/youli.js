@@ -450,6 +450,19 @@ var nav = function(server) {
                 }
             });
         },
+        
+        delete_withdraw_account: function(wx_user_id,id,cb) {
+            var url = host + "delete_withdraw_account";
+            var data = {wx_user_id:wx_user_id,id:id};
+            uu_request.request(url, data, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log(body);
+                    cb(err,body);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
     };
 };
 

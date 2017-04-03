@@ -656,6 +656,34 @@ exports.register = function(server, options, next) {
                 });
             }
         },
+        
+        //delete withdraw account
+        {
+            method: 'POST',
+            path: '/delete_withdraw_account',
+            handler: function(request,reply) {
+                var state;
+                
+                page_get_openid(request, function(openid) {
+                    state = {openid:openid};
+                    server.plugins.services.youli.get_user(openid, function(err,user) {
+                        var wx_user_id = user.id;
+                        var id = request.payload.id;
+                        
+                        if (!wx_user_id) {
+                            return reply({"success":false,"message":"param wx_user_id is null"});
+                        }
+                        if (!id) {
+                            return reply({"success":false,"message":"param id is null"});
+                        }
+                        
+                        server.plugins.services.youli.delete_withdraw_account(wx_user_id,id,function(err,content) {
+                            return reply({"success":true,"message":"ok"});
+                        });
+                    });
+                });
+            }
+        },
 
         {
             method: 'POST',
@@ -999,14 +1027,6 @@ exports.register = function(server, options, next) {
                     }
                     return reply(rows);
                 });
-            }
-        },
-
-        {
-            method: 'GET',
-            path: '/yihai_account',
-            handler: function(request, reply) {
-                return reply.view(get_view("yihai_account.html"));
             }
         },
         
