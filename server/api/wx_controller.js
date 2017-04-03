@@ -73,11 +73,11 @@ exports.register = function(server, options, next) {
             console.log("cookie openid:"+openid);
             cb(openid);
         }else {
-            // cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
-            page_get_access_token(request, function(openid) {
-                console.log("code openid:"+openid);
-                cb(openid);
-            });
+            cb("owHd9s_erpLPfU4uv0uiGzB1JeOI");
+            // page_get_access_token(request, function(openid) {
+            //     console.log("code openid:"+openid);
+            //     cb(openid);
+            // });
         }
     };
 
