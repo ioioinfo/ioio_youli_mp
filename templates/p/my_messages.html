@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="format-detection" content="telephone=no" />
-    <title>消息</title>
+    <title>未读消息</title>
     <style media="screen">
       @media screen and (max-width:640px){
         *{
@@ -36,10 +36,15 @@
         }
         .jiantou{
           display: inline-block;
-          width: 32px;
+          width: 25px;
+          height: 25px;
           position: absolute;
           left: 10px;
           top: 7px;
+        }
+        .jiantou img{
+            width: 25px;
+            height: 25px;
         }
         .title{
           display:block;
@@ -50,11 +55,16 @@
           text-align: center;
         }
         .menu{
-          width: 32px;
+          width: 25px;
+          height: 25px;
           display: inline-block;
           position: absolute;
           right: 10px;
           top: 13px;
+        }
+        .menu img{
+          width: 25px;
+          height: 25px;
         }
         .title span{
           color: #D81E06;
@@ -81,11 +91,12 @@
           background: #fff;
           border-radius: 4px;
           padding: 10px;
+           position: relative;
         }
         .newsTitle{
           width: 82%;
           padding-left: 10px;
-          font-size: 16px;
+          font-size: 18px;
           color: #000;
           font-weight: 400;
           display:block;
@@ -107,11 +118,22 @@
           display: inline-block;
           width: 82%;
           padding-left: 10px;
-          font-size: 12px;
+          font-size: 14px;
           line-height: 20px;
-          height: 41px;
           overflow:hidden;
-          text-overflow:ellipsis;
+          color: #919191;
+          margin-top: 14px;
+        }
+        .newsStatus{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+        }
+        .newsStatus img{
+            width: 30px;
+            height: 30px;
         }
       }
     </style>
@@ -127,6 +149,7 @@
 $(function() {
     var data = {debug:false,appId:'{{ info.appid }}',timestamp:{{ info.timestamp }},nonceStr:'{{ info.noncestr }}',signature:'{{ info.signature }}'};
     var p_url = '{{ info.url }}';
+    window.row_number = 0;
     data.jsApiList = [
         'checkJsApi',
         'hideOptionMenu',
@@ -162,7 +185,8 @@ class Warp extends React.Component {
             dataType: 'json',
             cache: false,
             success: function(data) {
-                this.setState({items: data.rows});
+                row_number = data.row_number;
+                this.setState({items: data.rows,row_number:row_number});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -172,7 +196,7 @@ class Warp extends React.Component {
     render() {
         return (
             <div className="wrap">
-                <Header length={this.state.items.length} />
+                <Header length={this.state.row_number} />
                 <Middle items={this.state.items} />
             </div>
         );
@@ -184,7 +208,7 @@ class Header extends React.Component {
         return (
             <div className="header">
             <span className="jiantou"><img src="images/youli/jiantou.png" alt="" /></span>
-            <span className="title">消息(<span>{this.props.length}</span>)</span>
+            <span className="title">消息(<span className="row_number">{this.props.length}</span>)</span>
             <span className="menu"><img src="images/youli/shouye1.png" alt="" /></span>
             </div>
         );
@@ -205,16 +229,53 @@ class Middle extends React.Component {
 };
 // 中间消息
 class News extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+        this.state = {item:this.props.item};
+    }
+    // 点击更改read的值
+    handleClick(e){
+        var item = this.state.item;
+        if (item.read == 1) {
+            return;
+        }
+        item.read = 1;
+        this.setState({item:item});
+
+        row_number = row_number - 1;
+        $(".row_number").html(row_number);
+
+        $.ajax({
+            url: '/my_message_read',
+            type: 'POST',
+            data: {id:item.id},
+            cache: false,
+            success: function(data) {
+
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    }
 render() {
+    var img="";
+    if(this.state.item.read == 0){
+        img="{{ image_host }}/images/weidu.png";
+    }else {
+        img="{{ image_host }}/images/yidu.png";
+    }
     return (
-        <div className="news">
-        <p className="newsTime"><span>{this.props.item.message_time_text}</span></p>
-        <div className="newsInfor">
-        <p className="newsTitle">{this.props.item.message_type_name}</p>
-        <div className="newscontent">
-        <p className="newsword">{this.props.item.body}</p>
-        </div>
-        </div>
+        <div className="news" >
+            <p className="newsTime"><span>{this.state.item.message_time_text}</span></p>
+            <div className="newsInfor" onClick={this.handleClick}>
+                <p className="newsTitle">{this.state.item.message_type_name}</p>
+                <div className="newscontent">
+                    <p className="newsword">{this.state.item.body}</p>
+                </div>
+                <p className="newsStatus"><img src={img} alt="" /></p>
+            </div>
         </div>
     );
 }
