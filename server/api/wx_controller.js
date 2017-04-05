@@ -347,6 +347,7 @@ exports.register = function(server, options, next) {
             }
         },
 
+        //项目访问记录
         {
             method: 'POST',
             path: '/visit_project',
@@ -481,6 +482,7 @@ exports.register = function(server, options, next) {
             }
         },
 
+        //账户变动记录
         {
             method: 'GET',
             path: '/cash_record',
@@ -1047,17 +1049,23 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
+                    //获取消息列表
                     server.plugins.services.youli.get_my_messages(openid, function(err,rows) {
                         if (err) {
                             return reply({success:false,message:"error"});
                         }
-                        return reply({success:true,rows:rows});
+                        //获取未读消息数量
+                        var row_number = 0;
+                        _.each(rows,function(row) {
+                            if (row.read == 0) {row_number = row_number+1;}
+                        });
+                        return reply({"success":true,"message":"ok","rows":rows,"row_number":row_number});
                     });
                 });
             }
         },
         
-        //获取站内信数量
+        //获取站内信未读数量
         {
             method: 'GET',
             path: '/get_my_message_count',
@@ -1069,8 +1077,24 @@ exports.register = function(server, options, next) {
                         if (err) {
                             return reply({"success":false,"message":"error"});
                         }
-                        return reply({"success":true,"row_number":row.row_number});
+                        return reply({"success":true,"message":"ok","row_number":row.row_number});
                     });
+                });
+            }
+        },
+        
+        //站内信标记为已读
+        {
+            method: 'POST',
+            path: '/my_message_read',
+            handler: function(request, reply) {
+                var id = request.payload.id;
+                if (!id) {
+                    return reply({"success":false,"message":"param id is null"});
+                }
+                
+                server.plugins.services.youli.my_message_read(id,function(err,content) {
+                    return reply({"success":true,"message":"ok"});
                 });
             }
         },

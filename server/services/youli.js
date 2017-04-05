@@ -412,6 +412,20 @@ var nav = function(server) {
             });
         },
         
+        //消息标记为已读
+        my_message_read: function(id,cb) {
+            var url = host + "my_message_read";
+            var data = {id:id};
+            uu_request.request(url, data, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    console.log(body);
+                    cb(err,body);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
+        
         //提现帐号
         get_withdraw_account: function(wx_user_id,cb) {
             var url = host + "get_withdraw_account?wx_user_id=%s";
