@@ -464,20 +464,24 @@
             constructor(props) {
                 super(props);
                 this.handleClick1=this.handleClick1.bind(this);
+                this.setSelected=this.setSelected.bind(this);
                 // 二级导航状态
                 this.state={show:false};
             }
             handleClick1(e){
                 this.setState({show:!this.state.show});
             }
+            setSelected(show){
+                this.setState({show:show});
+            }
           render() {
               var a = "";
               if(this.state.show){
-                  a =  <WithdrawDeposit/>;
+                  a =  <WithdrawDeposit setSelected={this.setSelected}/>;
               }
               return (
                   <div className="footer-wrap">
-                      <div className="footer" onClick={this.handleClick1} setSelected={this.setSelected} selected={this.state.selected}>提现</div>
+                      <div className="footer" onClick={this.handleClick1}>提现</div>
                       {a}
                   </div>
               );
@@ -499,8 +503,13 @@
                     return;
                 }
                 var amount=$(".WithdrawDeposit_money input").val();
+
                 if(!amount){
                     alert("请填写提现金额");
+                    return;
+                }
+                if(parseInt(amount)<1000){
+                    alert("提现金额必须大于1000");
                     return;
                 }
 
@@ -520,9 +529,12 @@
                   error: function(xhr, status, err) {
                   }.bind(this)
                 });
+                $(".WithdrawDeposit_money input").val("");
+                this.props.setSelected(false);
+
             }
             setSelected(item){
-                this.setState({item:item,show:false});
+                this.setState({item:item});
             }
             componentDidMount() {
                 $.ajax({
@@ -540,13 +552,12 @@
           render() {
               return (
                 <div className="WithdrawDeposit">
-
-                                    <p className="WithdrawDeposit_bank">
-                                        <DropDown row={this.state.row} item={this.state.item} setSelected={this.setSelected}/>
-                                    </p>
-                                    <p className="WithdrawDeposit_money"><input type="text" name=""   placeholder="请输入提现金额" /></p>
-                                    <p className="WithdrawDeposit_zhifubao"><span className="addCard"><a href="withdraw_accounts">添加帐号</a></span></p>
-                                    <p className="WithdrawDeposit_submit"><input type="submit" name="" value="提 交" onClick={this.handleClick}/></p>
+                    <p className="WithdrawDeposit_bank">
+                        <DropDown row={this.state.row} item={this.state.item} setSelected={this.setSelected}/>
+                    </p>
+                    <p className="WithdrawDeposit_money"><input type="text" name=""   placeholder="请输入提现金额" /></p>
+                    <p className="WithdrawDeposit_zhifubao"><span className="addCard"><a href="withdraw_accounts">添加帐号</a></span></p>
+                    <p className="WithdrawDeposit_submit"><input type="submit" name="" value="提 交" onClick={this.handleClick}/></p>
                 </div>
               );
           }
