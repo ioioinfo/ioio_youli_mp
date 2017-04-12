@@ -673,7 +673,7 @@
                     </div>
                     <div class="privilege-btn1">
                         <a href="/projects">
-                            <img src="{{ img_host }}/images/youli/order_detail_013.jpg">
+                            <img src="{{ image_host }}/images/youli/order_detail_013.jpg">
                         </a>
                     </div>
                     <div class="privilege-btn2">
@@ -690,6 +690,28 @@
             <div class="weui_dialog_bd">点击微信窗口右上角分享菜单进行分享，分享后获得分享优惠。</div>
             <div class="weui_dialog_ft">
                 <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui_dialog_alert" id="dialog_follow" style="opacity: 1;display: none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">预约成功</strong></div>
+            <div class="weui_dialog_bd img"><img src="{{ image_host }}/images/youli/mp20160405.png" /></div>
+            <div class="weui_dialog_bd">长按二维码关注公众号，方便查询返利状态。</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui_dialog_confirm" id="dialog_book" style="opacity: 1;display: none;">
+        <div class="weui_mask"></div>
+        <div class="weui_dialog">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">预约确认</strong></div>
+            <div class="weui_dialog_bd">确认预约该项目吗？</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog default cancel">取消</a>
+                <a href="javascript:;" class="weui_btn_dialog primary ok">确定</a>
             </div>
         </div>
     </div>
@@ -773,10 +795,17 @@
         wx.error(function(res){
         });
 
-        $("#wap-buybtn-for-book").click(function(){
+        var show_follow = function() {
+            var $dialog = $('#dialog_follow');
+            $dialog.fadeIn(200);
+            $dialog.find('.weui_btn_dialog').one('click', function () {
+                $dialog.fadeOut(200);
+            });
+        };
+        var subscribe_project = function() {
             var project_id = "{{ project.id }}";
             var openid = "{{ openid }}";
-
+            
             $.ajax({
                 url:"/subscribe_project",
                 type:"POST",
@@ -794,10 +823,10 @@
                             });
                             $dialog.find('.ok').one('click', function () {
                                 $("#dialog_bind .ok").prop("disabled", true);
-
+            
                                 var name = $("#dialog_bind .name").val();
                                 var mobile = $("#dialog_bind .mobile").val();
-
+            
                                 $.ajax({
                                     url:"/update_user_info_and_subscribe",
                                     type:"POST",
@@ -809,8 +838,8 @@
                                             return;
                                         }
                                         $("#dialog_bind .name").prop("disabled", true);
-
-                                        alert("预约成功");
+            
+                                        show_follow();
                                     }
                                 });
                                 $dialog.fadeOut(200);
@@ -819,10 +848,27 @@
                         alert(json.message);
                         return;
                     }
-
-                    alert("预约成功");
+            
+                    show_follow();
                 }
             });
+        };
+        
+        $("#wap-buybtn-for-book").click(function(){
+            $("#wap-buybtn-for-book").prop("disabled", true);
+            
+            //确认对话框
+            var $dialog = $('#dialog_book');
+            $dialog.fadeIn(200);
+            $dialog.find('.cancel').one('click', function () {
+                $dialog.fadeOut(200);
+            });
+            $dialog.find('.ok').one('click', function () {
+                $dialog.fadeOut(200);
+                subscribe_project();
+            });
+            
+            $("#wap-buybtn-for-book").prop("disabled", false);
         });
 
         $("#wap-buybtn-for-share").click(function(){
