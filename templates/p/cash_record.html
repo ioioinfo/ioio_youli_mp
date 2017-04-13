@@ -292,6 +292,7 @@
     <body>
         <div id="example"></div>
         <script>
+          var withdraw_amount = {{ user.withdraw_amount }};
           function list_amount_info1(cb) {
             var amountitem=[];
 
@@ -369,8 +370,8 @@
           render() {
               return (
                 <div className="header">
-                    可用余额：{{ user.balance_amount }}元
-                    提现申请金额：{{ user.withdraw_amount }}元
+                    可用余额：<span className="balance_amount">{{ user.balance_amount }}</span>元
+                    提现申请金额：<span className="withdraw_amount">{{ user.withdraw_amount }}</span>元
                 </div>
               );
           }
@@ -521,6 +522,7 @@
                   type: 'POST',
                   success: function(data) {
                     if (data.success) {
+                      $(".withdraw_amount").text(withdraw_amount+parseFloat(amount));
                       alert("申请提现成功");
                     } else {
                       alert(data.message);
