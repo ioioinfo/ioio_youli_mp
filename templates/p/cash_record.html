@@ -293,6 +293,9 @@
         <div id="example"></div>
         <script>
           var withdraw_amount = {{ user.withdraw_amount }};
+          var balance_amount = {{ user.balance_amount }};
+          var left_amount = {{ user.balance_amount - user.withdraw_amount }}
+          
           function list_amount_info1(cb) {
             var amountitem=[];
 
@@ -370,7 +373,7 @@
           render() {
               return (
                 <div className="header">
-                    可用余额：<span className="balance_amount">{{ user.balance_amount }}</span>元
+                    可用余额：<span className="left_amount">{{ user.balance_amount - user.withdraw_amount}}</span>元
                     提现申请金额：<span className="withdraw_amount">{{ user.withdraw_amount }}</span>元
                 </div>
               );
@@ -513,6 +516,10 @@
                     alert("提现金额必须大于1000");
                     return;
                 }
+                if(parseInt(amount)>left_amount){
+                    alert("可提现金额不足，余额"+left_amount+"元");
+                    return;
+                }
 
                 var account_id = this.state.item.id;
                 $.ajax({
@@ -522,7 +529,10 @@
                   type: 'POST',
                   success: function(data) {
                     if (data.success) {
-                      $(".withdraw_amount").text(withdraw_amount+parseFloat(amount));
+                      withdraw_amount = withdraw_amount+parseFloat(amount);
+                      left_amount = left_amount-parseFloat(amount);
+                      $(".withdraw_amount").text(withdraw_amount);
+                      $(".left_amount").text(left_amount);
                       alert("申请提现成功");
                     } else {
                       alert(data.message);
