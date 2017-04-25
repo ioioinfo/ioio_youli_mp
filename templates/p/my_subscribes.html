@@ -601,6 +601,10 @@
                 <p>
                     <span>返<i></i>利：</span><em class=""><%- row.shiji_fanli_amount %>元</em>
                 </p>
+                <% } else if (row.state == "yijujue") { %>
+                <p>
+                    <span>拒绝原因：</span><em class=""><%- row.reject_reason %></em>
+                </p>
                 <% } else { %>
                 <p>
                     <span>返<i></i>利：</span><em class=""><%- row.project.fanli_text %></em>
