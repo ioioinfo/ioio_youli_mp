@@ -582,7 +582,7 @@
         </div>
     </div>
 <script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.16.3/lodash.min.js"></script>
 <script type="lodash/template" id="process_list">
 <% _.forEach(projects, function(row) { %>
@@ -670,7 +670,8 @@ $(function() {
         'openCard',
         'chooseWXPay',
         'chooseImage',
-        'uploadImage'
+        'uploadImage',
+        'getLocalImgData'
     ];
     wx.config(data);
     wx.ready(function(){
@@ -760,6 +761,24 @@ $(function() {
             }
         });
     };
+    
+    //预览上传图片
+    var previewImage = function($dialog,localId) {
+        if (window.__wxjs_is_wkwebview) {
+            wx.getLocalImgData({
+                localId: localId, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                    localData = localData.replace('jgp', 'jpeg');//iOS 系统里面得到的数据，类型为 image/jgp,因此需要替换一下
+                    $dialog.find('.weui_dialog_img').append('<p data-id="'+localId+'"><img src="'+localData+'" alt=""><span class="weui_dialog_delect">-</span></p>');
+                },fail:function(res){
+                    alert("显示失败");
+                }
+            });
+        } else {
+            $dialog.find('.weui_dialog_img').append('<p data-id="'+localId+'"><img src="'+localId+'" alt=""><span class="weui_dialog_delect">-</span></p>');
+        }
+    };
 
     var reload_list_html = function (projects) {
         $("#cont").css("height",(projects.length *168+100) + "px");
@@ -813,7 +832,7 @@ $(function() {
                     success: function (res) {
                         var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                         _.each(localIds,function(localId) {
-                            $dialog.find('.weui_dialog_img').append('<p data-id="'+localId+'"><img src="'+localId+'" alt=""><span class="weui_dialog_delect">-</span></p>');
+                            previewImage($dialog,localId);
 
                             //上传图片
                             wx.uploadImage({
