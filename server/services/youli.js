@@ -65,6 +65,24 @@ var nav = function(server) {
             });
         },
         
+        //查询账户可用余额
+        find_user_available: function(wx_user_id,cb) {
+            var url = host + "find_user_available?wx_user_id=" + wx_user_id;
+            uu_request.get(url, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+
+                    var row = {};
+                    if (info["success"]) {
+                        row = info["row"];
+                    }
+                    cb(err,row);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
+        
         //保存提现申请
         save_withdraw(wx_user_id,account_id,amount,cb) {
             var url = host + "save_withdraw";

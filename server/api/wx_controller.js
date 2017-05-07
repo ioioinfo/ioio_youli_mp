@@ -17,9 +17,10 @@ exports.register = function(server, options, next) {
 
     var host = "http://youli.hankang365.com/";
     var qq_host = "https://api.weixin.qq.com/";
-    var appid = "wxb00a7cdfa2b63fa1";
-    var appsecret = "76235af4856413ca3c2c8ff700fdafac";
+    var appid = "wx685a2486fa127e0c";
+    var appsecret = "5dcb5bf720f041983916b200cc357dac";
     var cookie_options = {ttl:10*365*24*60*60*1000};
+    var cookie_key = "changqianbao_openid";
     
     var get_token = function(cb) {
         var access_token = server.plugins.cache.myCache.get("wx_access_token");
@@ -65,8 +66,8 @@ exports.register = function(server, options, next) {
 
         if (request.state && request.state.cookie) {
             state = request.state.cookie;
-            if (state.openid) {
-                openid = state.openid;
+            if (state[cookie_key]) {
+                openid = state[cookie_key];
             }
         }
         if (openid) {
@@ -157,6 +158,14 @@ exports.register = function(server, options, next) {
             handler: function(request, reply) {
                 return reply({"success":true,"message":"ok","desc":"ioio fanli"});
             },
+        },
+        
+        {
+            method: 'GET',
+            path: '/MP_verify_9QoHCNCtnB4NURfr.txt',
+            handler: function(request,reply) {
+                return reply("9QoHCNCtnB4NURfr");
+            }
         },
         
         {
@@ -286,7 +295,8 @@ exports.register = function(server, options, next) {
                 var number = [1,2,3,4];
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_projects(openid, function(err,projects) {
                         if (err) {
                             return reply.view(get_view("error.html"), projects);
@@ -369,11 +379,12 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         //查询用户余额
-                        server.plugins.services.youli.find_user_balance(user.id,function(err,row) {
-                            user.balance_amount = row.balance_amount;
+                        server.plugins.services.youli.find_user_available(user.id,function(err,row) {
+                            user.balance_amount = row.amount;
                             
                             jsapi_ticket(request, function(info) {
                                 var params = {openid:openid,user:user,info:info};
@@ -490,7 +501,8 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         var ep = eventproxy.create("rows","balance","withdraw",function(rows,balance,withdraw) {
                             user.balance_amount = balance.balance_amount;
@@ -575,7 +587,8 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         if (err) {
                             return reply("用户错误");
@@ -628,7 +641,8 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         jsapi_ticket(request, function(info) {
                             var params = {openid:openid,user:user,info:info};
@@ -679,7 +693,8 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_user(openid, function(err,user) {
                         jsapi_ticket(request, function(info) {
                             var params = {openid:openid,user:user,info:info};
@@ -862,7 +877,8 @@ exports.register = function(server, options, next) {
                 var cur = request.query.cur;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     server.plugins.services.youli.get_my_subscribes(openid, function(err,projects) {
                         if (err) {
                             return reply.view(get_view("error.html"), projects);
@@ -998,7 +1014,8 @@ exports.register = function(server, options, next) {
                 var state;
 
                 page_get_openid(request, function(openid) {
-                    state = {openid:openid};
+                    state = {};
+                    state[cookie_key] = openid;
                     jsapi_ticket(request, function(info) {
                         var params = {openid:openid,info:info};
                         return reply.view(get_view("my_recommends.html"), params).state('cookie', state, cookie_options);
