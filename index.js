@@ -44,9 +44,9 @@ var db_options = {
     connectionLimit: 10,
     host: '127.0.0.1',
     port: 3306,
-    user: 'root',
+    user: 'uuinfo',
     password: '123321',
-    database: 'scm_saas',
+    database: 'ioio_youli',
     charset: 'utf8_general_ci'
 };
 

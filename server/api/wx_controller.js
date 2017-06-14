@@ -366,8 +366,27 @@ exports.register = function(server, options, next) {
                 var project_id = request.payload.project_id;
                 var share_id = request.payload.share_id;
 
-                server.plugins.services.youli.visit_project(openid, project_id, share_id, function(err,result) {
-                    return reply({success:true,message:"ok"});
+                //检查是否绑定用户
+                server.plugins.services.youli.get_user(openid, function(err,user) {
+                    //用户不存在，创建用户
+                    if (err) {
+                        var nickname = "未关注";
+                        var sex = "1";
+                        var headimgurl = "http://211.149.248.241:18101/images/header.png";
+                        var unionid = "";
+                        
+                        server.plugins.services.youli.bind_user(openid,nickname,sex,headimgurl,unionid, function(err,result) {
+                            console.log(result);
+                            
+                            server.plugins.services.youli.visit_project(openid, project_id, share_id, function(err,result) {
+                                return reply({success:true,message:"ok"});
+                            });
+                        });
+                    } else {
+                        server.plugins.services.youli.visit_project(openid, project_id, share_id, function(err,result) {
+                            return reply({success:true,message:"ok"});
+                        });
+                    }
                 });
             }
         },
