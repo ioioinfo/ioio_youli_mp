@@ -18,7 +18,9 @@
         border-radius: 50%;
         background-color: #666;
     }
-    
+    ol{
+      list-style: none;
+    }
     .detail-desc .policy:after, .detail-desc .policy:before {
         display: table;
         content: '';
@@ -217,10 +219,19 @@
         color: #888;
     }
     .struct-data {
+        box-sizing: border-box;
+        width: 100%;
         background-color: #fff;
         padding: 10px 12px;
         border-top: 1px solid #e0e0e0;
         border-bottom: 1px solid #e0e0e0;
+    }
+    .struct-data img{
+        width: 100%;
+    }
+    .struct-data li{
+      line-height: 25px;
+      margin-bottom: 7px;
     }
     @media only screen and (-webkit-min-device-pixel-ratio:2),only screen and (min-device-pixel-ratio:2) {
         .struct-data {
@@ -805,7 +816,7 @@
         var subscribe_project = function() {
             var project_id = "{{ project.id }}";
             var openid = "{{ openid }}";
-            
+
             $.ajax({
                 url:"/subscribe_project",
                 type:"POST",
@@ -823,10 +834,10 @@
                             });
                             $dialog.find('.ok').one('click', function () {
                                 $("#dialog_bind .ok").prop("disabled", true);
-            
+
                                 var name = $("#dialog_bind .name").val();
                                 var mobile = $("#dialog_bind .mobile").val();
-            
+
                                 $.ajax({
                                     url:"/update_user_info_and_subscribe",
                                     type:"POST",
@@ -838,7 +849,7 @@
                                             return;
                                         }
                                         $("#dialog_bind .name").prop("disabled", true);
-            
+
                                         show_follow();
                                     }
                                 });
@@ -848,15 +859,15 @@
                         alert(json.message);
                         return;
                     }
-            
+
                     show_follow();
                 }
             });
         };
-        
+
         $("#wap-buybtn-for-book").click(function(){
             $("#wap-buybtn-for-book").prop("disabled", true);
-            
+
             //确认对话框
             var $dialog = $('#dialog_book');
             $dialog.fadeIn(200);
@@ -867,7 +878,7 @@
                 $dialog.fadeOut(200);
                 subscribe_project();
             });
-            
+
             $("#wap-buybtn-for-book").prop("disabled", false);
         });
 
