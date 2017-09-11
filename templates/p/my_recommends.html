@@ -147,6 +147,11 @@
                 .Amountinfor_li .Amountinfor_li_bottom_infor{
                     overflow: hidden;
                 }
+                .infor_none{
+                  text-align: center;
+                  margin-top: 57px;
+                  font-size: 16px;
+                }
             }
         </style>
     </head>
@@ -187,12 +192,16 @@
 	          });
           }
           render() {
-              return (
-                <ul className="Amountinfor_ul">
+              var list = (<p className="infor_none">暂无推荐信息</p>)
+              if(this.state.amountitem.length > 0){
+                list = (<ul className="Amountinfor_ul">
                     {this.state.amountitem.map(item => (
                         <AmountinforLi item={item} />))
                     }
-                </ul>
+                </ul>)
+              }
+              return (
+                <div>{list}</div>
               );
           }
         };

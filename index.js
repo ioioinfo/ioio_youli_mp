@@ -18,10 +18,14 @@ server.register(require('vision'), (err) => {
         throw err;
     }
 
+    var swig = require('swig');
+    swig.setDefaults({ cache: false });
+
     server.views({
         engines: {
-            html: require('swig')
+            html: swig
         },
+        isCached: false,
         relativeTo: __dirname,
         path: './templates'
     });
@@ -58,7 +62,7 @@ var db_options = {
 server.register([{
         register: require("good"),
         options: {
-            ops: {interval: 5000},
+            ops: false,
             reporters: {
                 myConsoleReporter: [{
                     module: 'good-console'
