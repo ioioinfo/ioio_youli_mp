@@ -226,7 +226,11 @@ exports.register = function(server, options, next) {
                             server.plugins.services.youli.unbind_user(openid, function(err,result) {
                                 return reply("");
                             });
+                        } else {
+                            return reply(resp.text({content:"终于等到你"}));
                         }
+                    } else {
+                        return reply(resp.text({content:"终于等到你"}));
                     }
                 });
             },
