@@ -207,7 +207,17 @@ exports.register = function(server, options, next) {
                     } else if (msg_type == "event") {
                         var event = xml.Event[0];
                         
+                        
                         if (event == "subscribe") {
+                            //关注事件
+                            //扫码参数
+                            var scene = xml.EventKey[0];
+                            if (scene && scene.substr(0,8) == "qrscene_") {
+                                scene = scene.substr(8);
+                            } else {
+                                scene = null;
+                            }
+                            
                             get_user_info(openid, function(ret_body) {
                                 var info = JSON.parse(ret_body);
                                 console.log(ret_body);
@@ -217,7 +227,7 @@ exports.register = function(server, options, next) {
                                 var headimgurl = info["headimgurl"];
                                 var unionid = info["unionid"];
 
-                                server.plugins.services.youli.bind_user(openid,nickname,sex,headimgurl,unionid, function(err,result) {
+                                server.plugins.services.youli.bind_user(openid,nickname,sex,headimgurl,unionid,scene, function(err,result) {
                                     console.log(result);
                                     return reply(resp.text({content:"终于等到你"}));
                                 });

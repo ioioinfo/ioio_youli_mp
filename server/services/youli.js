@@ -109,9 +109,9 @@ var nav = function(server) {
             });
         },
 
-        bind_user: function(openid,nickname,sex,headimgurl,unionid,cb) {
+        bind_user: function(openid,nickname,sex,headimgurl,unionid,scene,cb) {
             var url = host + "bind_user";
-            var data = {openid:openid,nickname:nickname,sex:sex,headimgurl:headimgurl,unionid:unionid};
+            var data = {openid:openid,nickname:nickname,sex:sex,headimgurl:headimgurl,unionid:unionid,scene:scene};
             uu_request.request(url, data, function(err, response, body) {
                 cb(err,body);
             });
