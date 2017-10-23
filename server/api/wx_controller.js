@@ -209,6 +209,19 @@ exports.register = function(server, options, next) {
                         
                         
                         if (event == "subscribe") {
+                            //欢迎语
+                            var welcome = `来啦？一直在等你~
+我是“能省会赚”的钱小包
+
+在这里，消费省钱
+把花出去的钱拿回来
+
+在这里，推荐赚钱
+和朋友一起变有钱
+
+了解长钱包http:\/\/mp.weixin.qq.com/s/jpsYejFZcB5NzIp3EEWLSw
+新人操作指南http:\/\/mp.weixin.qq.com/s/vtnzTy8jQk5ECVmgKfDt_w`;
+                            
                             //关注事件
                             //扫码参数
                             var scene = xml.EventKey[0];
@@ -229,7 +242,7 @@ exports.register = function(server, options, next) {
 
                                 server.plugins.services.youli.bind_user(openid,nickname,sex,headimgurl,unionid,scene, function(err,result) {
                                     console.log(result);
-                                    return reply(resp.text({content:"终于等到你"}));
+                                    return reply(resp.text({content:welcome}));
                                 });
                             });
                         } else if (event == "unsubscribe") {
@@ -237,10 +250,10 @@ exports.register = function(server, options, next) {
                                 return reply("");
                             });
                         } else {
-                            return reply(resp.text({content:"终于等到你"}));
+                            return reply(resp.text({content:welcome}));
                         }
                     } else {
-                        return reply(resp.text({content:"终于等到你"}));
+                        return reply(resp.text({content:welcome}));
                     }
                 });
             },
@@ -264,6 +277,25 @@ exports.register = function(server, options, next) {
                 
                 var menu = {
                     "button": [
+                        {
+                            "name": "关于长钱包",
+                            "sub_button":[
+                            {
+                                "type":"view",
+                                "name":"长钱包介绍",
+                                "url":"http://mp.weixin.qq.com/s/jpsYejFZcB5NzIp3EEWLSw"
+                            },
+                            {
+                                "type":"view",
+                                "name":"操作指南",
+                                "url":"http://mp.weixin.qq.com/s/vtnzTy8jQk5ECVmgKfDt_w"
+                            },
+                            {
+                                "type":"view",
+                                "name":"入驻商户",
+                                "url":"http://mp.weixin.qq.com/s/LQrPOtOmmJAQWdU463A5bA"
+                            }]
+                        },
                         {
                             "type": "view",
                             "name": "发现项目",
