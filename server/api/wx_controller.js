@@ -278,11 +278,16 @@ exports.register = function(server, options, next) {
                 var menu = {
                     "button": [
                         {
-                            "name": "关于长钱包",
+                            "type": "view",
+                            "name": "发现项目",
+                            "url": host + "go2auth/projects"
+                        },
+                        {
+                            "name": "关于",
                             "sub_button":[
                             {
                                 "type":"view",
-                                "name":"长钱包介绍",
+                                "name":"介绍",
                                 "url":"http://mp.weixin.qq.com/s/jpsYejFZcB5NzIp3EEWLSw"
                             },
                             {
@@ -298,11 +303,6 @@ exports.register = function(server, options, next) {
                         },
                         {
                             "type": "view",
-                            "name": "发现项目",
-                            "url": host + "go2auth/projects"
-                        },
-                        {
-                            "type": "view",
                             "name": "我的",
                             "url": host + "go2auth/user_account"
                         }
@@ -312,7 +312,7 @@ exports.register = function(server, options, next) {
                 get_token(function(access_token) {
                     url = util.format(url,qq_host,access_token);
                     
-                    uu_request.json(url, menu, function(err, body) {
+                    uu_request.json(url, menu, function(err, response, body) {
                         if (err) {
                             return reply(err);
                         }
